@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using YamlDotNet.RepresentationModel;
@@ -127,6 +128,14 @@ public class IKA3DCGExpansionEditor : EditorWindow
     string _sourcePath = "";
     string _targetPath = "";
     string _excludeCSV = "";
+
+    // GUID 再生成で扱う拡張子
+    static readonly string[] s_yamlExtensions =
+    {
+        ".anim", ".controller", ".overrideController",
+        ".prefab", ".mat", ".material", ".playable",
+        ".asset", ".unity"
+    };
 
     // =========================
     // メニュー
@@ -284,6 +293,10 @@ public class IKA3DCGExpansionEditor : EditorWindow
             if (GUILayout.Button("ファイルを複製＋参照更新"))
                 DuplicateSingleFileWithRewire();
         }
+
+        Space(4);
+        if (GUILayout.Button("GUID 再生成（選択＋参照元／参照先も更新）"))
+            RegenerateGuidsForSelectionWithReferences();
     }
 
     // =========================
@@ -947,7 +960,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
                                 .Where(p => !p.EndsWith(".meta"))
                                 .ToList();
 
-        var sync = SynchronizationContext.Current ?? new SynchronizationContext();
+        var sync = new SynchronizationContext();
         object lockObj = new object();
         int total = newPaths.Count, progress = 0;
 
@@ -1017,6 +1030,221 @@ public class IKA3DCGExpansionEditor : EditorWindow
                         s.Value = newGuid;
                 }
                 break;
+        }
+    }
+
+    // =========================
+    // GUID 再生成（選択＋参照元／参照先も更新）
+    // =========================
+    void RegenerateGuidsForSelectionWithReferences()
+    {
+        try
+        {
+            var assetPaths = CollectSelectedAssetAndReferencePaths();
+            if (assetPaths == null || assetPaths.Count == 0)
+            {
+                Debug.LogWarning("GUID を再生成するアセットが見つかりませんでした。Project ウィンドウでアセット／フォルダを選択してください。");
+                return;
+            }
+
+            if (!EditorUtility.DisplayDialog(
+                "GUID 再生成",
+                "選択しているアセットと、そのアセットが参照しているアセット、" +
+                "さらにそれらを参照しているアセットの GUID を新しく振り直し、" +
+                "参照先 GUID もすべて書き換えます。\n\n" +
+                "※ セット外のアセットからの参照は切れてしまう可能性があります。\n" +
+                "※ プロジェクトのバックアップを取ってから実行することを強く推奨します。\n\n" +
+                $"対象アセット数: {assetPaths.Count}\n\n続行しますか？",
+                "実行する", "キャンセル"))
+            {
+                return;
+            }
+
+            EditorUtility.DisplayProgressBar("GUID 再生成", "GUID マップを作成中...", 0.1f);
+            var guidMap = CreateNewGuidMapForAssets(assetPaths);
+
+            EditorUtility.DisplayProgressBar("GUID 再生成", "meta ファイルを書き換え中...", 0.4f);
+            RewriteMetaGuids(assetPaths, guidMap);
+
+            EditorUtility.DisplayProgressBar("GUID 再生成", "アセット YAML の参照 GUID を書き換え中...", 0.8f);
+            RewriteYamlReferences(assetPaths, guidMap);
+
+            AssetDatabase.Refresh();
+
+            Debug.Log($"[IKA] GUID 再生成完了: 対象アセット {assetPaths.Count} 件");
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
+    }
+
+    // 選択＋「参照している側」（依存先）のアセットパスを全部集める
+    // - フォルダが選択されていれば中身も全部対象
+    // - マテリアルやプレハブが選択されていれば、そこから参照している
+    //   テクスチャ・マテリアル・プレハブなども再帰的に対象に含める
+    // ※ 参照元（外部のアセット）は GUID は変えず、あとで参照だけ書き換える
+    static HashSet<string> CollectSelectedAssetAndReferencePaths()
+    {
+        var result = new HashSet<string>();
+        var queue = new Queue<string>();
+
+        // 1. 選択中のアセット／フォルダを展開（Assets/... のみ対象）
+        foreach (var obj in Selection.objects)
+        {
+            string path = AssetDatabase.GetAssetPath(obj);
+            if (string.IsNullOrEmpty(path)) continue;
+            if (!path.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase)) continue;
+
+            if (AssetDatabase.IsValidFolder(path))
+            {
+                // フォルダなら中身のアセットを全部列挙
+                string[] guids = AssetDatabase.FindAssets("", new[] { path });
+                for (int i = 0; i < guids.Length; i++)
+                {
+                    string p = AssetDatabase.GUIDToAssetPath(guids[i]);
+                    if (string.IsNullOrEmpty(p)) continue;
+                    if (!p.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase)) continue;
+                    if (result.Add(p)) queue.Enqueue(p);
+                }
+            }
+            else
+            {
+                if (result.Add(path)) queue.Enqueue(path);
+            }
+        }
+
+        // 2. 「参照している側」（依存先）を再帰的にたどる
+        //    YAML アセット（.mat, .prefab, .unity など）を開いて、
+        //    そこに書かれている guid から参照先アセットを追加していく
+        while (queue.Count > 0)
+        {
+            string path = queue.Dequeue();
+
+            // 参照を持つのは基本 YAML アセットなので、それだけを解析する
+            if (!IsYamlAssetPath(path)) continue;
+
+            string abs = NormalizeAbsOrAssetsPath(path);
+            if (string.IsNullOrEmpty(abs) || !File.Exists(abs)) continue;
+
+            string text = File.ReadAllText(abs);
+            foreach (Match m in Regex.Matches(text, @"guid:\s*([0-9a-fA-F]{32})"))
+            {
+                string guid = m.Groups[1].Value;
+                if (string.IsNullOrEmpty(guid)) continue;
+
+                string refPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (string.IsNullOrEmpty(refPath)) continue;
+                if (!refPath.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase)) continue;
+
+                // 参照先（テクスチャや別プレハブなど）も GUID 再生成対象に含める
+                if (result.Add(refPath))
+                    queue.Enqueue(refPath);
+            }
+        }
+
+        return result;
+    }
+
+    static List<string> GetAllYamlAssetPaths()
+    {
+        var list = new List<string>();
+        string[] guids = AssetDatabase.FindAssets("");
+        for (int i = 0; i < guids.Length; i++)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+            if (string.IsNullOrEmpty(path)) continue;
+            if (!path.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase)) continue;
+            if (!IsYamlAssetPath(path)) continue;
+            if (!list.Contains(path)) list.Add(path);
+        }
+        return list;
+    }
+
+    static bool IsYamlAssetPath(string path)
+    {
+        string ext = Path.GetExtension(path);
+        return s_yamlExtensions.Any(e => string.Equals(e, ext, StringComparison.OrdinalIgnoreCase));
+    }
+
+    static Dictionary<string, string> CreateNewGuidMapForAssets(IEnumerable<string> assetPaths)
+    {
+        var map = new Dictionary<string, string>();
+        foreach (var path in assetPaths)
+        {
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            if (string.IsNullOrEmpty(guid)) continue;
+
+            if (!map.ContainsKey(guid))
+            {
+                string newGuid = GUID.Generate().ToString();
+                map[guid] = newGuid;
+            }
+        }
+        return map;
+    }
+
+    static void RewriteMetaGuids(IEnumerable<string> assetPaths, Dictionary<string, string> guidMap)
+    {
+        foreach (var path in assetPaths)
+        {
+            string oldGuid = AssetDatabase.AssetPathToGUID(path);
+            if (string.IsNullOrEmpty(oldGuid)) continue;
+            if (!guidMap.TryGetValue(oldGuid, out var newGuid)) continue;
+
+            string abs = NormalizeAbsOrAssetsPath(path);
+            if (string.IsNullOrEmpty(abs)) continue;
+
+            string metaPath = abs + ".meta";
+            if (!File.Exists(metaPath)) continue;
+
+            string text = File.ReadAllText(metaPath);
+            string pattern = @"guid:\s*" + Regex.Escape(oldGuid);
+            string replaced = Regex.Replace(text, pattern, "guid: " + newGuid);
+
+            if (!string.Equals(text, replaced, StringComparison.Ordinal))
+                File.WriteAllText(metaPath, replaced, new UTF8Encoding(false));
+        }
+    }
+
+    static void RewriteYamlReferences(IEnumerable<string> assetPaths, Dictionary<string, string> guidMap)
+    {
+        var assetList = assetPaths.ToList();
+        int total = assetList.Count;
+        for (int i = 0; i < assetList.Count; i++)
+        {
+            string path = assetList[i];
+            if (!IsYamlAssetPath(path)) continue;
+
+            string abs = NormalizeAbsOrAssetsPath(path);
+            if (string.IsNullOrEmpty(abs) || !File.Exists(abs)) continue;
+
+            string text = File.ReadAllText(abs);
+            bool changed = false;
+
+            string newText = Regex.Replace(text, @"guid:\s*([0-9a-fA-F]{32})", match =>
+            {
+                string oldGuid = match.Groups[1].Value;
+                if (guidMap.TryGetValue(oldGuid, out var newGuid))
+                {
+                    changed = true;
+                    return "guid: " + newGuid;
+                }
+                return match.Value;
+            });
+
+            if (changed)
+                File.WriteAllText(abs, newText, new UTF8Encoding(false));
+
+            EditorUtility.DisplayProgressBar(
+                "GUID 再生成",
+                $"参照 GUID 更新中...\n{path}",
+                Mathf.Clamp01(0.8f + 0.19f * (float)(i + 1) / Mathf.Max(1, total))
+            );
         }
     }
 
