@@ -1,0 +1,66 @@
+﻿【Readme】
+
+日本語バージョンを英語バージョンに修正して
+
+【アセット名】
+Models/
+
+Arcane Dish Purifier.fbx
+
+
+Textures/
+
+Arcane Dish Purifier_AlbedoTransparency
+Arcane Dish Purifier_MetallicSmoothness
+Arcane Dish Purifier_Normal
+
+Materials/
+
+Arcane Dish Purifier.mat
+
+Prefabs/
+Arcane Dish Purifier.prefab
+Cleansing Elixir.prefab
+Dish Basket.prefab
+Fine Dish_01.prefab
+Fine Dish_02.prefab
+Fine Dish_03.prefab
+Fine Dish_04.prefab
+Fine Dish_05.prefab
+Fine Dish_06.prefab
+Mug.prefab
+Soiled Dish_01.prefab
+Soiled Dish_02.prefab
+Soiled Dish_03.prefab
+Soiled Dish_04.prefab
+Soiled Dish_05.prefab
+Soiled Dish_06.prefab
+Soiled Mug.prefab
+
+【動作確認済みUnityバージョン】
+Unity 2022.3 LTS（推奨）
+Unity 2020.3 以降のバージョンで互換性あり
+
+【対応レンダーパイプライン】
+Built-in Render Pipeline（標準パイプラインにて動作確認済み）
+URP / HDRP は未検証（※動作保証外）
+
+【使用方法】
+「Prefabs」フォルダ内のPrefabを、シーンにドラッグ＆ドロップしてください。
+マテリアルはすでに割り当て済みです。
+テクスチャは2048×2048の高解像度で収録されています。
+
+本アセットでは Unity の Standard Shader を使用しており、
+MetallicSmoothness テクスチャのRチャンネルにMetallic、AチャンネルにSmoothnessの情報を格納しています。
+環境に合わせて、マテリアルの設定値を調整してご使用ください。
+
+【ライセンス・利用条件】
+本アセットは、個人・商用問わず使用可能です。
+加工の有無にかかわらず、再配布・転売は禁止されています。
+クレジット表記は必須ではありませんが、記載していただけると嬉しいです。
+
+【お問い合わせ】
+ご質問等ございましたら、以下の連絡先またはX（旧Twitter）にてご連絡ください
+
+（X）    https://x.com/ikameshi_vr
+(Mail)   sato.no.ikameshi@gmail.com

@@ -7,7 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using YamlDotNet.RepresentationModel;
 
 public class IKA3DCGExpansionEditor : EditorWindow
@@ -185,6 +187,10 @@ public class IKA3DCGExpansionEditor : EditorWindow
         DrawColliderFitSection();
 
         Space(16);
+        DrawTitle("Missing Script 一括削除");
+        DrawMissingScriptSection();
+
+        Space(16);
         DrawTitle("複製＋参照更新（GUID差し替え）");
         DrawDuplicateRewireSection();
 
@@ -279,6 +285,25 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
         if (GUILayout.Button("子の Renderer から【親の既存コライダー】をフィット"))
             FitExistingCollidersOnSelection();
+    }
+
+    void DrawMissingScriptSection()
+    {
+        EditorGUILayout.HelpBox(
+            "Missing (Mono Script) コンポーネントを一括削除します。\n" +
+            "・Project でプレハブやフォルダを選択 → 選択中プレハブから削除\n" +
+            "・開いているシーン全体から削除\n" +
+            "・Assets 以下すべてのプレハブから削除\n",
+            MessageType.Info);
+
+        if (GUILayout.Button("選択中プレハブから Missing Script を削除（Project 選択）"))
+            RemoveMissingScriptsFromSelectedPrefabs();
+
+        if (GUILayout.Button("開いているシーンから Missing Script を削除"))
+            RemoveMissingScriptsFromOpenScenes();
+
+        if (GUILayout.Button("Assets 以下すべてのプレハブから Missing Script を削除"))
+            RemoveMissingScriptsFromAllPrefabsUnderAssets();
     }
 
     void DrawDuplicateRewireSection()
@@ -794,6 +819,142 @@ public class IKA3DCGExpansionEditor : EditorWindow
     }
 
     // =========================
+    // Missing Script 一括削除
+    // =========================
+    void RemoveMissingScriptsFromOpenScenes()
+    {
+        int totalRemoved = 0;
+        int sceneCount = EditorSceneManager.sceneCount;
+
+        for (int i = 0; i < sceneCount; i++)
+        {
+            Scene scene = EditorSceneManager.GetSceneAt(i);
+            if (!scene.isLoaded) continue;
+
+            int removedInScene = 0;
+            var roots = scene.GetRootGameObjects();
+            for (int r = 0; r < roots.Length; r++)
+            {
+                removedInScene += RemoveMissingFromGameObjectRecursive(roots[r]);
+            }
+
+            if (removedInScene > 0)
+            {
+                totalRemoved += removedInScene;
+                EditorSceneManager.MarkSceneDirty(scene);
+                EditorSceneManager.SaveScene(scene);
+                Debug.Log($"[IKA] Scene '{scene.path}' から Missing Script を {removedInScene} 個削除しました。");
+            }
+        }
+
+        Debug.Log($"[IKA] 開いているシーンから削除された Missing Script 合計: {totalRemoved}");
+    }
+
+    void RemoveMissingScriptsFromSelectedPrefabs()
+    {
+        var prefabPaths = CollectPrefabPathsFromSelection();
+        if (prefabPaths.Count == 0)
+        {
+            Debug.LogWarning("[IKA] Project ウィンドウで Prefab またはフォルダを選択してください。");
+            return;
+        }
+
+        int totalRemoved = 0;
+        int processed = 0;
+
+        foreach (var path in prefabPaths)
+        {
+            var contents = PrefabUtility.LoadPrefabContents(path);
+            int removed = RemoveMissingFromGameObjectRecursive(contents);
+
+            if (removed > 0)
+            {
+                totalRemoved += removed;
+                PrefabUtility.SaveAsPrefabAsset(contents, path);
+                Debug.Log($"[IKA] Prefab '{path}' から Missing Script を {removed} 個削除しました。");
+            }
+
+            PrefabUtility.UnloadPrefabContents(contents);
+            processed++;
+        }
+
+        Debug.Log($"[IKA] 選択中プレハブ {processed} 個を処理し、Missing Script を合計 {totalRemoved} 個削除しました。");
+    }
+
+    void RemoveMissingScriptsFromAllPrefabsUnderAssets()
+    {
+        string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" });
+        if (guids == null || guids.Length == 0)
+        {
+            Debug.LogWarning("[IKA] Assets 以下に Prefab が見つかりません。");
+            return;
+        }
+
+        int totalRemoved = 0;
+        int processed = 0;
+
+        for (int i = 0; i < guids.Length; i++)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+            if (string.IsNullOrEmpty(path)) continue;
+
+            var contents = PrefabUtility.LoadPrefabContents(path);
+            int removed = RemoveMissingFromGameObjectRecursive(contents);
+
+            if (removed > 0)
+            {
+                totalRemoved += removed;
+                PrefabUtility.SaveAsPrefabAsset(contents, path);
+                Debug.Log($"[IKA] Prefab '{path}' から Missing Script を {removed} 個削除しました。");
+            }
+
+            PrefabUtility.UnloadPrefabContents(contents);
+            processed++;
+        }
+
+        Debug.Log($"[IKA] Assets 以下の Prefab {processed} 個を処理し、Missing Script を合計 {totalRemoved} 個削除しました。");
+    }
+
+    int RemoveMissingFromGameObjectRecursive(GameObject go)
+    {
+        int removed = GameObjectUtility.RemoveMonoBehavioursWithMissingScript(go);
+
+        foreach (Transform child in go.transform)
+            removed += RemoveMissingFromGameObjectRecursive(child.gameObject);
+
+        return removed;
+    }
+
+    HashSet<string> CollectPrefabPathsFromSelection()
+    {
+        var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var obj in Selection.objects)
+        {
+            string path = AssetDatabase.GetAssetPath(obj);
+            if (string.IsNullOrEmpty(path)) continue;
+
+            if (AssetDatabase.IsValidFolder(path))
+            {
+                string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { path });
+                for (int i = 0; i < guids.Length; i++)
+                {
+                    string p = AssetDatabase.GUIDToAssetPath(guids[i]);
+                    if (!string.IsNullOrEmpty(p) && p.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+                        paths.Add(p);
+                }
+            }
+            else
+            {
+                if (path.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+                    paths.Add(path);
+            }
+        }
+
+        return paths;
+    }
+
+    // =========================
     // VRChat（リフレクションで安全追加）
     // =========================
     void AddVRCPickupAndSync(GameObject go)
@@ -1052,7 +1213,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
                 "選択しているアセットと、そのアセットが参照しているアセット、" +
                 "さらにそれらを参照しているアセットの GUID を新しく振り直し、" +
                 "参照先 GUID もすべて書き換えます。\n\n" +
-                "※ セット外のアセットからの参照は切れてしまう可能性があります。\n" +
+                "※ セット外のアセットからの参照は GUID が変わることで切れてしまう可能性があります。\n" +
                 "※ プロジェクトのバックアップを取ってから実行することを強く推奨します。\n\n" +
                 $"対象アセット数: {assetPaths.Count}\n\n続行しますか？",
                 "実行する", "キャンセル"))
@@ -1213,28 +1374,34 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
     static void RewriteYamlReferences(IEnumerable<string> assetPaths, Dictionary<string, string> guidMap)
     {
-        var assetList = assetPaths.ToList();
-        int total = assetList.Count;
-        for (int i = 0; i < assetList.Count; i++)
-        {
-            string path = assetList[i];
-            if (!IsYamlAssetPath(path)) continue;
+        // プロジェクト内の全 YAML
+        var allYaml = GetAllYamlAssetPaths();
+        int total = allYaml.Count;
 
+        // GUID の32桁パターン
+        var guidRegex = new Regex(@"[0-9a-fA-F]{32}", RegexOptions.Compiled);
+
+        for (int i = 0; i < allYaml.Count; i++)
+        {
+            string path = allYaml[i];
             string abs = NormalizeAbsOrAssetsPath(path);
-            if (string.IsNullOrEmpty(abs) || !File.Exists(abs)) continue;
+            if (!File.Exists(abs)) continue;
 
             string text = File.ReadAllText(abs);
             bool changed = false;
 
-            string newText = Regex.Replace(text, @"guid:\s*([0-9a-fA-F]{32})", match =>
+            string newText = guidRegex.Replace(text, match =>
             {
-                string oldGuid = match.Groups[1].Value;
-                if (guidMap.TryGetValue(oldGuid, out var newGuid))
+                string oldGuid = match.Value.ToLower();
+
+                // もし(old → new) の対応があるなら置換
+                if (guidMap.TryGetValue(oldGuid, out string newGuid))
                 {
                     changed = true;
-                    return "guid: " + newGuid;
+                    return newGuid;
                 }
-                return match.Value;
+
+                return oldGuid;
             });
 
             if (changed)
@@ -1242,11 +1409,13 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
             EditorUtility.DisplayProgressBar(
                 "GUID 再生成",
-                $"参照 GUID 更新中...\n{path}",
-                Mathf.Clamp01(0.8f + 0.19f * (float)(i + 1) / Mathf.Max(1, total))
+                $"参照 GUID を更新中...\n{path}",
+                (float)(i + 1) / total
             );
         }
     }
+
+
 
     // =========================
     // 共通ユーティリティ
@@ -1336,7 +1505,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
         int pressed = EditorUtility.DisplayDialogComplex(
             "Prefab 内のオブジェクトです",
-            $"【{childObj.name}】は【{PrefabUtility.GetOutermostPrefabInstanceRoot(childObj).name}】のPrefab内にあります。Prefabを解除しますか？",
+            $"はのPrefab内にあります。Prefabを解除しますか？",
             "はい（解除して続行）", "キャンセル", "いいえ（解除せず続行）"
         );
 
