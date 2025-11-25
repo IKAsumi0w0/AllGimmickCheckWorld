@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -37,13 +37,6 @@ public class CRTTV_Gimmick : UdonSharpBehaviour
 
     public void ShowSwitch()
     {
-        if (ModelSwitch)
-        {
-            ModelSwitch = false;
-        }
-        else
-        {
-            ModelSwitch = true;
-        }
+        ModelSwitch = !ModelSwitch;
     }
 }

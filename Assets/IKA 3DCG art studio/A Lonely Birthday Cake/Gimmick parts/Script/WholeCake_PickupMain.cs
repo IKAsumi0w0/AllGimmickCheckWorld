@@ -1,4 +1,4 @@
-﻿using BestHTTP.Authentication;
+using BestHTTP.Authentication;
 using BestHTTP.SecureProtocol.Org.BouncyCastle.Utilities;
 using System;
 using System.Linq;
@@ -128,7 +128,6 @@ public class WholeCake_PickupMain : UdonSharpBehaviour
             CheckLightingFlg = true;
             RequestSerialization();
         }
-        Debug.Log($"CandleNormalCount:{CandleNormalCount}  LightingOptionCount:{LightingOptionCount}  LightingCount:{LightingCount}");
     }
 
     void OnTriggerEnter(Collider coll)
