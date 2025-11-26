@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1814012011166967152}
   - component: {fileID: 617986124545131183}
   - component: {fileID: 4127206333933097293}
+  - component: {fileID: 1134393780134041759}
   m_Layer: 13
   m_Name: Mame_Bazooka_PS
   m_TagString: Untagged
@@ -4924,7 +4925,7 @@ AudioSource:
   MinDistance: 5
   MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -4997,3 +4998,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1134393780134041759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197893474216275876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gain: 10
+  Far: 40
+  Near: 0
+  VolumetricRadius: 0
+  EnableSpatialization: 1
+  UseAudioSourceVolumeCurve: 1

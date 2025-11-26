@@ -142,8 +142,8 @@ public class IKA3DCGExpansionEditor : EditorWindow
     // =========================
     // メニュー
     // =========================
-    [MenuItem("IKA3DCG/IKA拡張設定")]
-    static void Open() => GetWindow<IKA3DCGExpansionEditor>("IKA3DCG拡張ツール");
+    [MenuItem("IKA3DCG/IKA3DExp1Editor")]
+    static void Open() => GetWindow<IKA3DCGExpansionEditor>("IKA3DExp1Editor");
 
     // =========================
     // ライフサイクル

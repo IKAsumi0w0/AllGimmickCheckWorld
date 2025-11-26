@@ -1,6 +1,7 @@
 
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -8,6 +9,7 @@ using VRC.Udon;
 public class IKA_DebugStartupHide : UdonSharpBehaviour
 {
     [SerializeField] GameObject _obj;
+    [SerializeField] Text _stateUI;
 
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(State))] bool _state = false;
 
@@ -18,6 +20,7 @@ public class IKA_DebugStartupHide : UdonSharpBehaviour
         {
             _state = value;
             if (_obj) _obj.SetActive(value);
+            if (_stateUI) _stateUI.text = value ? "ON" : "OFF";
         }
     }
 

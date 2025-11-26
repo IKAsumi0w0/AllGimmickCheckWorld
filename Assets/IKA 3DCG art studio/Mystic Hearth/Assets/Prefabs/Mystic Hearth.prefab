@@ -19963,6 +19963,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5689164045741976441}
   - component: {fileID: 6381316208078920772}
+  - component: {fileID: 7198387011122487133}
   m_Layer: 0
   m_Name: SE
   m_TagString: Untagged
@@ -20001,7 +20002,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 1
   Mute: 0
-  Spatialize: 0
+  Spatialize: 1
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
@@ -20081,6 +20082,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7198387011122487133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2399533809227859416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gain: 10
+  Far: 40
+  Near: 0
+  VolumetricRadius: 0
+  EnableSpatialization: 1
+  UseAudioSourceVolumeCurve: 1
 --- !u!1 &2515944064409040757
 GameObject:
   m_ObjectHideFlags: 0
@@ -20901,7 +20920,8 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-    m_Mesh: {fileID: -7829626978161639792, guid: 85fd901c0ed7019429aac52405e586d3, type: 3}
+    m_Mesh: {fileID: -7829626978161639792, guid: 85fd901c0ed7019429aac52405e586d3,
+      type: 3}
     m_MeshRenderer: {fileID: 0}
     m_SkinnedMeshRenderer: {fileID: 9183736164625682987}
     m_Sprite: {fileID: 0}
@@ -25914,6 +25934,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4343157413214346100}
   - component: {fileID: 3091610075554741526}
+  - component: {fileID: 3374920712678821839}
   m_Layer: 0
   m_Name: SE
   m_TagString: Untagged
@@ -25952,7 +25973,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 1
   Mute: 0
-  Spatialize: 0
+  Spatialize: 1
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
@@ -26032,6 +26053,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3374920712678821839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4283609858322750266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gain: 10
+  Far: 40
+  Near: 0
+  VolumetricRadius: 0
+  EnableSpatialization: 1
+  UseAudioSourceVolumeCurve: 1
 --- !u!1 &4535489871302427388
 GameObject:
   m_ObjectHideFlags: 0
@@ -31413,6 +31452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3846360559206052624}
   - component: {fileID: 3028844539539309383}
+  - component: {fileID: 5924556735055932389}
   m_Layer: 0
   m_Name: SE
   m_TagString: Untagged
@@ -31451,7 +31491,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 1
   Mute: 0
-  Spatialize: 0
+  Spatialize: 1
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
@@ -31531,6 +31571,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5924556735055932389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5637298932865328855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gain: 10
+  Far: 40
+  Near: 0
+  VolumetricRadius: 0
+  EnableSpatialization: 1
+  UseAudioSourceVolumeCurve: 1
 --- !u!1 &5664968919398750368
 GameObject:
   m_ObjectHideFlags: 0
@@ -32596,7 +32654,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8650652885749813838}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000015807396, y: -0.000000010517527, z: 0.050295755, w: 0.99873435}
+  m_LocalRotation: {x: -0.000000015807396, y: -0.000000010517527, z: 0.050295755,
+    w: 0.99873435}
   m_LocalPosition: {x: 0.0000000013969874, y: 0.026274959, z: 1.5543122e-15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

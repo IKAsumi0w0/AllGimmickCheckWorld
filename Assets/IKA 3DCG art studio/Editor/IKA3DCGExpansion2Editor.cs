@@ -4,18 +4,20 @@ using System.Collections.Generic;
 
 #if VRC_SDK_VRCSDK3
 using VRC.SDKBase;          // VRC_Pickup
-using VRC.SDK3.Components;  // VRCObjectSync
+using VRC.SDK3.Components;  // VRCObjectSync, VRCSpatialAudioSource(ワールド用)
 using VRC.Udon;             // UdonBehaviour
 #endif
 
 public class IKA3DCGExpansion2Editor : EditorWindow
 {
+    // ウィンドウ全体スクロール
+    Vector2 scroll;
+
     // 任意コンポーネント検索
     MonoScript targetScript;
 
     // 検索結果
     List<GameObject> resultObjects = new List<GameObject>();
-    Vector2 scroll;
 
     // Pickup Version フィルタ種別
     enum PickupVersionFilter
@@ -27,10 +29,15 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 
     PickupVersionFilter pickupVersionFilter = PickupVersionFilter.All;
 
-    [MenuItem("IKA3DCG/IKA3DCGExpansion2Editor")]
+#if VRC_SDK_VRCSDK3
+    // AudioSource検索時に「VRCSpatialAudioSource が付いているものを除外するか」
+    bool excludeVRCSpatialAudio = false;
+#endif
+
+    [MenuItem("IKA3DCG/IKA3DExp2Editor")]
     static void Open()
     {
-        GetWindow<IKA3DCGExpansion2Editor>("IKA3DCGExpansion2Editor");
+        GetWindow<IKA3DCGExpansion2Editor>("IKA3DExp2Editor");
     }
 
     void OnGUI()
@@ -38,19 +45,33 @@ public class IKA3DCGExpansion2Editor : EditorWindow
         EditorGUILayout.LabelField("IKA3DCGExpansion2Editor", EditorStyles.boldLabel);
         EditorGUILayout.Space();
 
+        // 🔽 ウィンドウ全体をスクロール可能にする
+        scroll = EditorGUILayout.BeginScrollView(scroll);
+
+        // 任意コンポーネント検索
         DrawGenericComponentSearchGUI();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
+        // VRChatコンポーネント検索
         DrawVRChatSearchGUI();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
+        // Pickup Version 検索＆アップグレード
         DrawVRCPickupVersionSearchGUI();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
+        // AudioSource 検索
+        DrawAudioSourceSearchGUI();
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+        // 検索結果
         DrawSearchResultGUI();
+
+        EditorGUILayout.EndScrollView();
     }
 
     // ============================================================
@@ -127,6 +148,28 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 #else
         EditorGUILayout.HelpBox("VRC SDK3 が導入されていません。", MessageType.Warning);
 #endif
+    }
+
+    // ============================================================
+    // ■ Type 一般検索
+    // ============================================================
+    void SearchByType(System.Type type)
+    {
+        resultObjects.Clear();
+
+        // 非アクティブも含めて検索
+        Object[] objs = FindObjectsOfType(type, true);
+
+        foreach (var o in objs)
+        {
+            Component c = o as Component;
+            if (c != null && c.gameObject != null)
+            {
+                resultObjects.Add(c.gameObject);
+            }
+        }
+
+        Debug.Log(type.Name + " を持つオブジェクト: " + resultObjects.Count + " 件");
     }
 
     // ============================================================
@@ -314,24 +357,61 @@ public class IKA3DCGExpansion2Editor : EditorWindow
     }
 
     // ============================================================
-    // ■ Type 一般検索
+    // ■ AudioSource 検索
     // ============================================================
-    void SearchByType(System.Type type)
+    void DrawAudioSourceSearchGUI()
+    {
+        EditorGUILayout.LabelField("■ AudioSource 検索", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox(
+            "現在開いているシーン内の AudioSource が付いた GameObject を検索します。",
+            MessageType.Info);
+
+#if VRC_SDK_VRCSDK3
+        // 「VRCSpatialAudioSource を持っていないものだけ」に絞るオプション
+        excludeVRCSpatialAudio = EditorGUILayout.ToggleLeft(
+            "VRC Spatial Audio Source が付いていないオブジェクトだけに絞り込む",
+            excludeVRCSpatialAudio);
+#else
+        EditorGUILayout.HelpBox(
+            "VRC SDK3 がないため、VRC Spatial Audio Source の有無による絞り込みは無効です。",
+            MessageType.Info);
+#endif
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("AudioSource を検索"))
+        {
+            SearchAudioSourceObjects();
+        }
+        if (GUILayout.Button("クリア"))
+        {
+            resultObjects.Clear();
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+    void SearchAudioSourceObjects()
     {
         resultObjects.Clear();
 
-        Object[] objs = FindObjectsOfType(type, true);
-
-        foreach (var o in objs)
+        AudioSource[] sources = FindObjectsOfType<AudioSource>(true);
+        foreach (var s in sources)
         {
-            Component c = o as Component;
-            if (c != null && c.gameObject != null)
+            if (s == null) continue;
+
+            GameObject go = s.gameObject;
+            if (go == null) continue;
+
+#if VRC_SDK_VRCSDK3
+            // VRCSpatialAudioSource を持っているオブジェクトを除外する場合
+            if (excludeVRCSpatialAudio && go.GetComponent<VRCSpatialAudioSource>() != null)
             {
-                resultObjects.Add(c.gameObject);
+                continue;
             }
+#endif
+            resultObjects.Add(go);
         }
 
-        Debug.Log(type.Name + " を持つオブジェクト: " + resultObjects.Count + " 件");
+        Debug.Log("AudioSource を持つオブジェクト: " + resultObjects.Count + " 件");
     }
 
     // ============================================================
@@ -351,8 +431,6 @@ public class IKA3DCGExpansion2Editor : EditorWindow
         }
 
         EditorGUILayout.Space();
-
-        scroll = EditorGUILayout.BeginScrollView(scroll);
 
         foreach (var go in resultObjects)
         {
@@ -374,8 +452,6 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 
             EditorGUILayout.EndHorizontal();
         }
-
-        EditorGUILayout.EndScrollView();
     }
 
     void SelectObject(GameObject go)

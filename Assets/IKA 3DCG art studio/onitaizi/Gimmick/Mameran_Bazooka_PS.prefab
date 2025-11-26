@@ -4913,6 +4913,7 @@ GameObject:
   - component: {fileID: 3395794777247008776}
   - component: {fileID: 4512435374511583191}
   - component: {fileID: 1101740615623408693}
+  - component: {fileID: 3337391359775930613}
   m_Layer: 13
   m_Name: Mameran_Bazooka_PS
   m_TagString: Untagged
@@ -9832,7 +9833,7 @@ AudioSource:
   MinDistance: 5
   MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -9905,6 +9906,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3337391359775930613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797638513358144220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gain: 10
+  Far: 40
+  Near: 0
+  VolumetricRadius: 0
+  EnableSpatialization: 1
+  UseAudioSourceVolumeCurve: 1
 --- !u!1 &7684491121563920551
 GameObject:
   m_ObjectHideFlags: 0
