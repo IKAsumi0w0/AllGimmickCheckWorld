@@ -445,7 +445,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6378610435057894393}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.63700557, y: -0.007066548, z: 0.020486891}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -536,6 +536,7 @@ MonoBehaviour:
   currentlyHeldBy: {fileID: 0}
   pickupable: 1
   proximity: 1
+  version: 1
 --- !u!114 &1341745333300675329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -549,6 +550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllowCollisionOwnershipTransfer: 1
+  ForceKinematicOnRemote: 0
 --- !u!114 &6524243697792969409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,7 +596,7 @@ MonoBehaviour:
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
   _syncMethod: 2
-  serializedProgramAsset: {fileID: 11400000, guid: 4d94c971068d03e4fad5cadcc0b347b0,
+  serializedProgramAsset: {fileID: 11400000, guid: c71a5c88f37dffc4983fa8246ddb5073,
     type: 2}
   programSource: {fileID: 11400000, guid: 9c659c03e837a194c932f7d327c4ff9a, type: 2}
   serializedPublicVariablesBytesString: Ai8AAAAAATIAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAFQAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AAAAAAAYBAAAAAAAAACcBBAAAAHQAeQBwAGUAAWgAAABTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEcAZQBuAGUAcgBpAGMALgBMAGkAcwB0AGAAMQBbAFsAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4ALgBJAG4AdABlAHIAZgBhAGMAZQBzAC4ASQBVAGQAbwBuAFYAYQByAGkAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AXQBdACwAIABtAHMAYwBvAHIAbABpAGIAAQEJAAAAVgBhAHIAaQBhAGIAbABlAHMALwEAAAABaAAAAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEwAaQBzAHQAYAAxAFsAWwBWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAEkAbgB0AGUAcgBmAGEAYwBlAHMALgBJAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlACwAIABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgBdAF0ALAAgAG0AcwBjAG8AcgBsAGkAYgABAAAABgEAAAAAAAAAAi8CAAAAAUkAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAGAAMQBbAFsAUwB5AHMAdABlAG0ALgBJAG4AdAAzADIALAAgAG0AcwBjAG8AcgBsAGkAYgBdAF0ALAAgAFYAUgBDAC4AVQBkAG8AbgAuAEMAbwBtAG0AbwBuAAIAAAAGAgAAAAAAAAAnAQQAAAB0AHkAcABlAAEXAAAAUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwAsACAAbQBzAGMAbwByAGwAaQBiACcBCgAAAFMAeQBtAGIAbwBsAE4AYQBtAGUAAR8AAABfAF8AXwBVAGQAbwBuAFMAaABhAHIAcABCAGUAaABhAHYAaQBvAHUAcgBWAGUAcgBzAGkAbwBuAF8AXwBfACcBBAAAAHQAeQBwAGUAARYAAABTAHkAcwB0AGUAbQAuAEkAbgB0ADMAMgAsACAAbQBzAGMAbwByAGwAaQBiABcBBQAAAFYAYQBsAHUAZQACAAAABwUHBQcF
@@ -723,6 +725,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8363298842222162694}
     m_Modifications:
+    - target: {fileID: 1970751510566004729, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 71ece52d1b6c4f443bfe30e3076efcda,
+        type: 2}
+    - target: {fileID: 2785861615653279857, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: Far
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785861615653279857, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: Near
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4045856531097675080, guid: e071dd1085676b74f827d4086473e6aa,
         type: 3}
       propertyPath: m_Size.x
@@ -809,6 +827,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: IKAPickupEatGimmick (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7752475375197095000, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292629434585279594, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292629434585279594, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: MinDistance
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -860,6 +893,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8363298842222162694}
     m_Modifications:
+    - target: {fileID: 1970751510566004729, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 71ece52d1b6c4f443bfe30e3076efcda,
+        type: 2}
+    - target: {fileID: 2785861615653279857, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: Far
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785861615653279857, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: Near
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4045856531097675080, guid: e071dd1085676b74f827d4086473e6aa,
         type: 3}
       propertyPath: m_Size.x
@@ -950,6 +999,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: IKAPickupEatGimmick
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752475375197095000, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292629434585279594, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292629434585279594, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: MinDistance
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

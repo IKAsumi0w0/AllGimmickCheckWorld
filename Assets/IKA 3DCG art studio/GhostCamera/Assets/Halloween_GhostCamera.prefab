@@ -225,11 +225,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Gain: 10
-  Far: 40
+  Far: 0
   Near: 0
   VolumetricRadius: 0
   EnableSpatialization: 1
-  UseAudioSourceVolumeCurve: 1
+  UseAudioSourceVolumeCurve: 0
 --- !u!1 &2723547105229535546
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -398,7 +398,7 @@ MonoBehaviour:
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
   _syncMethod: 2
-  serializedProgramAsset: {fileID: 11400000, guid: 8612384f96be00d48b04f8fd88c34fc0,
+  serializedProgramAsset: {fileID: 11400000, guid: a9175fb29b18a4d468b0db03968a5a84,
     type: 2}
   programSource: {fileID: 11400000, guid: 8768e8c4e87334443ab7950ffe983c42, type: 2}
   serializedPublicVariablesBytesString: Ai8AAAAAATIAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAFQAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AAAAAAAYBAAAAAAAAACcBBAAAAHQAeQBwAGUAAWgAAABTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEcAZQBuAGUAcgBpAGMALgBMAGkAcwB0AGAAMQBbAFsAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4ALgBJAG4AdABlAHIAZgBhAGMAZQBzAC4ASQBVAGQAbwBuAFYAYQByAGkAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AXQBdACwAIABtAHMAYwBvAHIAbABpAGIAAQEJAAAAVgBhAHIAaQBhAGIAbABlAHMALwEAAAABaAAAAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEwAaQBzAHQAYAAxAFsAWwBWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAEkAbgB0AGUAcgBmAGEAYwBlAHMALgBJAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlACwAIABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgBdAF0ALAAgAG0AcwBjAG8AcgBsAGkAYgABAAAABgEAAAAAAAAAAi8CAAAAAUkAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAGAAMQBbAFsAUwB5AHMAdABlAG0ALgBJAG4AdAAzADIALAAgAG0AcwBjAG8AcgBsAGkAYgBdAF0ALAAgAFYAUgBDAC4AVQBkAG8AbgAuAEMAbwBtAG0AbwBuAAIAAAAGAgAAAAAAAAAnAQQAAAB0AHkAcABlAAEXAAAAUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwAsACAAbQBzAGMAbwByAGwAaQBiACcBCgAAAFMAeQBtAGIAbwBsAE4AYQBtAGUAAR8AAABfAF8AXwBVAGQAbwBuAFMAaABhAHIAcABCAGUAaABhAHYAaQBvAHUAcgBWAGUAcgBzAGkAbwBuAF8AXwBfACcBBAAAAHQAeQBwAGUAARYAAABTAHkAcwB0AGUAbQAuAEkAbgB0ADMAMgAsACAAbQBzAGMAbwByAGwAaQBiABcBBQAAAFYAYQBsAHUAZQACAAAABwUHBQcF
@@ -463,6 +463,7 @@ MonoBehaviour:
   currentlyHeldBy: {fileID: 0}
   pickupable: 1
   proximity: 0.5
+  version: 1
 --- !u!65 &1605952083849629048
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -497,6 +498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllowCollisionOwnershipTransfer: 0
+  ForceKinematicOnRemote: 0
 --- !u!1 &3351620762206987408
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,7 +803,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -863,7 +865,7 @@ MonoBehaviour:
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
   _syncMethod: 3
-  serializedProgramAsset: {fileID: 11400000, guid: 44b40f3cf66ab0e4996644c956654683,
+  serializedProgramAsset: {fileID: 11400000, guid: 952a07fe67facd4418c0d7fbafb5b770,
     type: 2}
   programSource: {fileID: 11400000, guid: 1475e0c556af5f44cb43a31d77f3ce69, type: 2}
   serializedPublicVariablesBytesString: Ai8AAAAAATIAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAFQAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AAAAAAAYBAAAAAAAAACcBBAAAAHQAeQBwAGUAAWgAAABTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEcAZQBuAGUAcgBpAGMALgBMAGkAcwB0AGAAMQBbAFsAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4ALgBJAG4AdABlAHIAZgBhAGMAZQBzAC4ASQBVAGQAbwBuAFYAYQByAGkAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AXQBdACwAIABtAHMAYwBvAHIAbABpAGIAAQEJAAAAVgBhAHIAaQBhAGIAbABlAHMALwEAAAABaAAAAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEwAaQBzAHQAYAAxAFsAWwBWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAEkAbgB0AGUAcgBmAGEAYwBlAHMALgBJAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlACwAIABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgBdAF0ALAAgAG0AcwBjAG8AcgBsAGkAYgABAAAABgEAAAAAAAAAAi8CAAAAAUkAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAGAAMQBbAFsAUwB5AHMAdABlAG0ALgBJAG4AdAAzADIALAAgAG0AcwBjAG8AcgBsAGkAYgBdAF0ALAAgAFYAUgBDAC4AVQBkAG8AbgAuAEMAbwBtAG0AbwBuAAIAAAAGAgAAAAAAAAAnAQQAAAB0AHkAcABlAAEXAAAAUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwAsACAAbQBzAGMAbwByAGwAaQBiACcBCgAAAFMAeQBtAGIAbwBsAE4AYQBtAGUAAR8AAABfAF8AXwBVAGQAbwBuAFMAaABhAHIAcABCAGUAaABhAHYAaQBvAHUAcgBWAGUAcgBzAGkAbwBuAF8AXwBfACcBBAAAAHQAeQBwAGUAARYAAABTAHkAcwB0AGUAbQAuAEkAbgB0ADMAMgAsACAAbQBzAGMAbwByAGwAaQBiABcBBQAAAFYAYQBsAHUAZQACAAAABwUHBQcF
@@ -937,6 +939,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -947,16 +960,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_ecca7c'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -1098,6 +1119,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -1108,16 +1140,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_02cd3d'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -1259,6 +1299,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -1269,16 +1320,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_fd29c0'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -1420,6 +1479,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -1430,16 +1500,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_855c46'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -1581,6 +1659,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -1591,16 +1680,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_984e7c'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -1742,6 +1839,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -1752,16 +1860,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_1558b2'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -1903,6 +2019,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -1913,16 +2040,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_a8b340'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -2064,6 +2199,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -2074,16 +2220,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_9c5c46'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -2225,6 +2379,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -2235,16 +2400,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_d54235'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -2386,6 +2559,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -2396,16 +2580,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_89bb4d'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -2547,6 +2739,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -2557,16 +2760,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_e04d4c'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -2708,6 +2919,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -2718,16 +2940,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_663a18'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -2869,6 +3099,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -2879,16 +3120,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_baf3e2'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -3030,6 +3279,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -3040,16 +3300,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_4edcfe'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -3191,6 +3459,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -3201,16 +3480,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_2f2a8b'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -3352,6 +3639,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -3362,16 +3660,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_a69324'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -3513,6 +3819,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -3523,16 +3840,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_44c82c'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -3674,6 +3999,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -3684,16 +4020,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_6aafcd'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -3835,6 +4179,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -3845,16 +4200,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_1c8a40'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active
@@ -3996,6 +4359,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4920011681070894171, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e935bd661a938004cb192d09a016c704,
+        type: 2}
+    - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: version
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6795377792845263442, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: pickupable
@@ -4006,16 +4380,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[PhotoGen] Halloween_PhotoCard_Pickup_f4798e'
       objectReference: {fileID: 0}
+    - target: {fileID: 7274269899676079189, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
+      propertyPath: serializedProgramAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc7bcf7f88beb64bb4264081d285a0c,
+        type: 2}
     - target: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7812622752866709552, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8654567237336882082, guid: b450ab0680da7f64b83f64a73aac1ec7,
+        type: 3}
     - target: {fileID: 8886296515636283011, guid: b450ab0680da7f64b83f64a73aac1ec7,
         type: 3}
       propertyPath: m_Active

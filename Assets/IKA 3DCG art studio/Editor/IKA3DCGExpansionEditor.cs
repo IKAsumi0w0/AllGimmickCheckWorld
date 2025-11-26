@@ -105,8 +105,8 @@ public class IKA3DCGExpansionEditor : EditorWindow
     bool _addObjectSync = false;
 
     // --- Fit Existing Collider ---
-    float _fitPadding = 0f;      // ローカル各軸に±付与
-    float _fitScale = 1.0f;      // 最終サイズ乗算
+    float _fitPadding = 0f;
+    float _fitScale = 1.0f;
 
     // --- Linear Arrange ---
     Direction _arrangeDirection = Direction.X;
@@ -115,23 +115,20 @@ public class IKA3DCGExpansionEditor : EditorWindow
     // --- Grid Arrange ---
     GridPlane _gridPlane = GridPlane.XZ;
     ArrangeOrderMode _arrangeOrder = ArrangeOrderMode.NameOrder;
-    bool _centered = true;       // 最初のオブジェクトをグリッド中心にする
-    bool _keepYHeightXZ = true;  // XZグリッド時に元のY高さを維持
-    // Manual spacing
+    bool _centered = true;
+    bool _keepYHeightXZ = true;
     float _spacingX = 1f;
     float _spacingY = 1f;
     float _spacingZ = 1f;
-    // Auto spacing
-    bool _autoSpacing = true;     // Renderer/Colliderから自動算出
-    bool _uniformCell = true;     // 選択中の最大寸法で統一セル
-    float _autoMargin = 0.05f;    // 追加余白（m）
+    bool _autoSpacing = true;
+    bool _uniformCell = true;
+    float _autoMargin = 0.05f;
 
     // --- Duplicate & Rewire ---
     string _sourcePath = "";
     string _targetPath = "";
     string _excludeCSV = "";
 
-    // GUID 再生成で扱う拡張子
     static readonly string[] s_yamlExtensions =
     {
         ".anim", ".controller", ".overrideController",
@@ -173,6 +170,9 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
         Space(8);
         EditorGUILayout.LabelField($"選択オブジェクト数：{_selectionCount}");
+
+        if (GUILayout.Button("シーン内の 最上位 Prefab インスタンス をすべて選択"))
+            SelectAllPrefabsInOpenScenes();
 
         Space(16);
         DrawTitle("一直線に並べる");
@@ -409,7 +409,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
         }
     }
 
-    // ref なし版
     void CreateMesh(Mesh mesh, GameObject childObj)
     {
         List<Vector3> v = new List<Vector3>();
@@ -527,9 +526,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
         }
     }
 
-    // =========================
-    // 既存コライダーを子のRendererからフィット
-    // =========================
     void FitExistingCollidersOnSelection()
     {
         var roots = Selection.gameObjects;
@@ -586,7 +582,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
         Debug.Log($"既存Colliderフィット完了：{fitCount} / {roots.Length}");
     }
 
-    // 子階層レンダラーのワールドAABB→親ローカルAABB
     bool TryComputeLocalBoundsFromChildrenRenderers(GameObject root, out Bounds localBounds)
     {
         localBounds = new Bounds(Vector3.zero, Vector3.zero);
@@ -596,7 +591,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
         bool hasAny = false;
         for (int i = 0; i < renderers.Length; i++)
         {
-            Bounds wb = renderers[i].bounds; // ワールドAABB
+            Bounds wb = renderers[i].bounds;
             if (wb.size == Vector3.zero) continue;
 
             Vector3[] corners = GetBoundsWorldCorners(wb);
@@ -723,7 +718,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
             return src.OrderBy(o => o.transform.GetHierarchyPath()).ToArray();
         if (mode == ArrangeOrderMode.SelectionOrder)
             return _recentSelectionCache.Where(x => src.Contains(x)).ToArray();
-        return src.OrderBy(o => o.name, StringComparer.Ordinal).ToArray(); // NameOrder
+        return src.OrderBy(o => o.name, StringComparer.Ordinal).ToArray();
     }
 
     void ComputeGrid(int n, out int cols, out int rows)
@@ -755,7 +750,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
         {
             case GridPlane.XY: col = Vector3.right; row = Vector3.up; break;
             case GridPlane.YZ: col = Vector3.forward; row = Vector3.up; break;
-            default: col = Vector3.right; row = Vector3.forward; break; // XZ
+            default: col = Vector3.right; row = Vector3.forward; break;
         }
     }
 
@@ -786,12 +781,12 @@ public class IKA3DCGExpansionEditor : EditorWindow
         {
             if (_gridPlane == GridPlane.XZ) { sx = maxX; sy = 0f; sz = maxZ; return; }
             if (_gridPlane == GridPlane.XY) { sx = maxX; sy = maxY; sz = 0f; return; }
-            sx = 0f; sy = maxY; sz = maxZ; return; // YZ
+            sx = 0f; sy = maxY; sz = maxZ; return;
         }
 
         if (_gridPlane == GridPlane.XZ) { sx = maxX; sy = 0f; sz = maxZ; return; }
         if (_gridPlane == GridPlane.XY) { sx = maxX; sy = maxY; sz = 0f; return; }
-        sx = 0f; sy = maxY; sz = maxZ;           // YZ
+        sx = 0f; sy = maxY; sz = maxZ;
     }
 
     bool TryGetWorldBounds(GameObject root, out Bounds worldBounds)
@@ -816,6 +811,53 @@ public class IKA3DCGExpansionEditor : EditorWindow
             }
         }
         return has;
+    }
+
+    // =========================
+    // シーン内 最上位 Prefab インスタンス一括選択
+    // =========================
+    void SelectAllPrefabsInOpenScenes()
+    {
+        var result = new List<GameObject>();
+
+        int sceneCount = EditorSceneManager.sceneCount;
+        for (int i = 0; i < sceneCount; i++)
+        {
+            Scene scene = EditorSceneManager.GetSceneAt(i);
+            if (!scene.isLoaded) continue;
+
+            var roots = scene.GetRootGameObjects();
+            for (int r = 0; r < roots.Length; r++)
+            {
+                CollectPrefabInstancesRecursive(roots[r].transform, result);
+            }
+        }
+
+        Selection.objects = result.ToArray();
+        _selectionCount = result.Count;
+
+        Debug.Log($"[IKA] シーン内の 最上位 Prefab インスタンス を {result.Count} 個選択しました。");
+    }
+
+    void CollectPrefabInstancesRecursive(Transform tr, List<GameObject> list)
+    {
+        GameObject go = tr.gameObject;
+
+        var status = PrefabUtility.GetPrefabInstanceStatus(go);
+
+        // 最上位の Prefab インスタンスだけを対象にする
+        if (status != PrefabInstanceStatus.NotAPrefab)
+        {
+            GameObject outer = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
+            if (outer == go)
+            {
+                if (!list.Contains(go))
+                    list.Add(go);
+            }
+        }
+
+        for (int i = 0; i < tr.childCount; i++)
+            CollectPrefabInstancesRecursive(tr.GetChild(i), list);
     }
 
     // =========================
@@ -991,7 +1033,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
             go.AddComponent(objectSyncType);
     }
 
-    // ---- リフレクション補助 ----
     static Type FindType(string fullName)
     {
         foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
@@ -1194,9 +1235,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
         }
     }
 
-    // =========================
-    // GUID 再生成（選択＋参照元／参照先も更新）
-    // =========================
     void RegenerateGuidsForSelectionWithReferences()
     {
         try
@@ -1244,17 +1282,11 @@ public class IKA3DCGExpansionEditor : EditorWindow
         }
     }
 
-    // 選択＋「参照している側」（依存先）のアセットパスを全部集める
-    // - フォルダが選択されていれば中身も全部対象
-    // - マテリアルやプレハブが選択されていれば、そこから参照している
-    //   テクスチャ・マテリアル・プレハブなども再帰的に対象に含める
-    // ※ 参照元（外部のアセット）は GUID は変えず、あとで参照だけ書き換える
     static HashSet<string> CollectSelectedAssetAndReferencePaths()
     {
         var result = new HashSet<string>();
         var queue = new Queue<string>();
 
-        // 1. 選択中のアセット／フォルダを展開（Assets/... のみ対象）
         foreach (var obj in Selection.objects)
         {
             string path = AssetDatabase.GetAssetPath(obj);
@@ -1263,7 +1295,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
             if (AssetDatabase.IsValidFolder(path))
             {
-                // フォルダなら中身のアセットを全部列挙
                 string[] guids = AssetDatabase.FindAssets("", new[] { path });
                 for (int i = 0; i < guids.Length; i++)
                 {
@@ -1279,14 +1310,10 @@ public class IKA3DCGExpansionEditor : EditorWindow
             }
         }
 
-        // 2. 「参照している側」（依存先）を再帰的にたどる
-        //    YAML アセット（.mat, .prefab, .unity など）を開いて、
-        //    そこに書かれている guid から参照先アセットを追加していく
         while (queue.Count > 0)
         {
             string path = queue.Dequeue();
 
-            // 参照を持つのは基本 YAML アセットなので、それだけを解析する
             if (!IsYamlAssetPath(path)) continue;
 
             string abs = NormalizeAbsOrAssetsPath(path);
@@ -1302,7 +1329,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
                 if (string.IsNullOrEmpty(refPath)) continue;
                 if (!refPath.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase)) continue;
 
-                // 参照先（テクスチャや別プレハブなど）も GUID 再生成対象に含める
                 if (result.Add(refPath))
                     queue.Enqueue(refPath);
             }
@@ -1374,11 +1400,9 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
     static void RewriteYamlReferences(IEnumerable<string> assetPaths, Dictionary<string, string> guidMap)
     {
-        // プロジェクト内の全 YAML
         var allYaml = GetAllYamlAssetPaths();
         int total = allYaml.Count;
 
-        // GUID の32桁パターン
         var guidRegex = new Regex(@"[0-9a-fA-F]{32}", RegexOptions.Compiled);
 
         for (int i = 0; i < allYaml.Count; i++)
@@ -1394,7 +1418,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
             {
                 string oldGuid = match.Value.ToLower();
 
-                // もし(old → new) の対応があるなら置換
                 if (guidMap.TryGetValue(oldGuid, out string newGuid))
                 {
                     changed = true;
@@ -1415,11 +1438,6 @@ public class IKA3DCGExpansionEditor : EditorWindow
         }
     }
 
-
-
-    // =========================
-    // 共通ユーティリティ
-    // =========================
     static YamlStream LoadYaml(string path)
     {
         var input = new StringReader(File.ReadAllText(path));
@@ -1514,14 +1532,11 @@ public class IKA3DCGExpansionEditor : EditorWindow
             PrefabUtility.UnpackPrefabInstance(childObj.transform.parent.gameObject, PrefabUnpackMode.OutermostRoot, InteractionMode.UserAction);
             return true;
         }
-        else if (pressed == 1) return false; // キャンセル→全体中断
-        return true;                          // いいえ→スキップせず続行
+        else if (pressed == 1) return false;
+        return true;
     }
 }
 
-// =========================
-// ヒエラルキー順比較ユーティリティ
-// =========================
 public static class TransformPathUtil
 {
     public static string GetHierarchyPath(this Transform t)

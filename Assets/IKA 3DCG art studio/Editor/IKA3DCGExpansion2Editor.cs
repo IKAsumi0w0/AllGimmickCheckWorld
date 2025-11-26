@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 #if VRC_SDK_VRCSDK3
 using VRC.SDKBase;          // VRC_Pickup
-using VRC.SDK3.Components;  // VRCObjectSync, VRCSpatialAudioSource(ワールド用)
+using VRC.SDK3.Components;  // VRCObjectSync, VRCSpatialAudioSource
 using VRC.Udon;             // UdonBehaviour
 #endif
 
@@ -18,6 +18,15 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 
     // 検索結果
     List<GameObject> resultObjects = new List<GameObject>();
+
+    // 検索範囲
+    enum SearchScope
+    {
+        EntireScene,        // シーン全体
+        SelectedHierarchy   // 選択中 GameObject 配下のみ
+    }
+
+    SearchScope searchScope = SearchScope.EntireScene;
 
     // Pickup Version フィルタ種別
     enum PickupVersionFilter
@@ -45,7 +54,12 @@ public class IKA3DCGExpansion2Editor : EditorWindow
         EditorGUILayout.LabelField("IKA3DCGExpansion2Editor", EditorStyles.boldLabel);
         EditorGUILayout.Space();
 
-        // 🔽 ウィンドウ全体をスクロール可能にする
+        // 検索範囲の指定
+        DrawSearchScopeGUI();
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+        // ウィンドウ全体をスクロール可能にする
         scroll = EditorGUILayout.BeginScrollView(scroll);
 
         // 任意コンポーネント検索
@@ -63,7 +77,7 @@ public class IKA3DCGExpansion2Editor : EditorWindow
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-        // AudioSource 検索
+        // AudioSource / VRC Spatial Audio 検索
         DrawAudioSourceSearchGUI();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -72,6 +86,23 @@ public class IKA3DCGExpansion2Editor : EditorWindow
         DrawSearchResultGUI();
 
         EditorGUILayout.EndScrollView();
+    }
+
+    // ============================================================
+    // ■ 検索範囲 GUI
+    // ============================================================
+    void DrawSearchScopeGUI()
+    {
+        EditorGUILayout.LabelField("■ 検索範囲", EditorStyles.boldLabel);
+
+        searchScope = (SearchScope)EditorGUILayout.EnumPopup("検索対象", searchScope);
+
+        if (searchScope == SearchScope.SelectedHierarchy && Selection.gameObjects.Length == 0)
+        {
+            EditorGUILayout.HelpBox(
+                "検索範囲が「選択オブジェクト配下」の場合は、ヒエラルキーでルートとなるオブジェクトを選択してください。",
+                MessageType.Info);
+        }
     }
 
     // ============================================================
@@ -157,8 +188,7 @@ public class IKA3DCGExpansion2Editor : EditorWindow
     {
         resultObjects.Clear();
 
-        // 非アクティブも含めて検索
-        Object[] objs = FindObjectsOfType(type, true);
+        Object[] objs = FindObjectsOfTypeInScope(type);
 
         foreach (var o in objs)
         {
@@ -170,6 +200,61 @@ public class IKA3DCGExpansion2Editor : EditorWindow
         }
 
         Debug.Log(type.Name + " を持つオブジェクト: " + resultObjects.Count + " 件");
+    }
+
+    // searchScope に応じてコンポーネントを取得（非ジェネリック版）
+    Object[] FindObjectsOfTypeInScope(System.Type type)
+    {
+        // シーン全体、または何も選択されていない場合
+        if (searchScope == SearchScope.EntireScene || Selection.gameObjects.Length == 0)
+            return FindObjectsOfType(type, true);
+
+        // 選択オブジェクト配下のみ
+        var set = new HashSet<Object>();
+        var roots = Selection.gameObjects;
+        for (int i = 0; i < roots.Length; i++)
+        {
+            var go = roots[i];
+            if (go == null) continue;
+
+            var comps = go.GetComponentsInChildren(type, true);
+            for (int n = 0; n < comps.Length; n++)
+            {
+                if (comps[n] != null)
+                    set.Add(comps[n]);
+            }
+        }
+
+        Object[] arr = new Object[set.Count];
+        set.CopyTo(arr);
+        return arr;
+    }
+
+    // searchScope に応じてコンポーネントを取得（ジェネリック版）
+    T[] FindComponentsInScope<T>() where T : Component
+    {
+        if (searchScope == SearchScope.EntireScene || Selection.gameObjects.Length == 0)
+            return FindObjectsOfType<T>(true);
+
+        var list = new List<T>();
+        var seen = new HashSet<T>();
+
+        var roots = Selection.gameObjects;
+        for (int i = 0; i < roots.Length; i++)
+        {
+            var go = roots[i];
+            if (go == null) continue;
+
+            var comps = go.GetComponentsInChildren<T>(true);
+            for (int n = 0; n < comps.Length; n++)
+            {
+                var c = comps[n];
+                if (c != null && seen.Add(c))
+                    list.Add(c);
+            }
+        }
+
+        return list.ToArray();
     }
 
     // ============================================================
@@ -211,7 +296,7 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 
 #if VRC_SDK_VRCSDK3
 
-        VRC_Pickup[] pickups = FindObjectsOfType<VRC_Pickup>(true);
+        VRC_Pickup[] pickups = FindComponentsInScope<VRC_Pickup>();
 
         foreach (var p in pickups)
         {
@@ -219,7 +304,7 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 
             SerializedObject so = new SerializedObject(p);
 
-            // ---- Version 用 Enum プロパティを自動探索 ----
+            // Version 用 Enum プロパティを自動探索
             SerializedProperty versionProp = FindPickupVersionProperty(so);
             if (versionProp == null)
             {
@@ -264,7 +349,6 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 #endif
     }
 
-    // ★ ここが一括アップグレード処理
     void UpgradePickupVersionTo11()
     {
         resultObjects.Clear();
@@ -272,7 +356,7 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 #if VRC_SDK_VRCSDK3
 
         int upgradedCount = 0;
-        VRC_Pickup[] pickups = FindObjectsOfType<VRC_Pickup>(true);
+        VRC_Pickup[] pickups = FindComponentsInScope<VRC_Pickup>();
 
         foreach (var p in pickups)
         {
@@ -298,7 +382,7 @@ public class IKA3DCGExpansion2Editor : EditorWindow
                     index11 = i;
             }
 
-            if (index11 < 0) // 1.1 が見つからない場合は何もしない
+            if (index11 < 0)
                 continue;
 
             int currentIdx = versionProp.enumValueIndex;
@@ -321,7 +405,6 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 #endif
     }
 
-    // VRC_Pickup の SerializedObject から、Version 用 Enum プロパティを探す共通関数
     SerializedProperty FindPickupVersionProperty(SerializedObject so)
     {
         SerializedProperty it = so.GetIterator();
@@ -357,24 +440,21 @@ public class IKA3DCGExpansion2Editor : EditorWindow
     }
 
     // ============================================================
-    // ■ AudioSource 検索
+    // ■ AudioSource / VRC Spatial Audio 検索
     // ============================================================
     void DrawAudioSourceSearchGUI()
     {
-        EditorGUILayout.LabelField("■ AudioSource 検索", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("■ Audio / Spatial Audio 検索", EditorStyles.boldLabel);
+
         EditorGUILayout.HelpBox(
-            "現在開いているシーン内の AudioSource が付いた GameObject を検索します。",
+            "検索範囲の設定に応じて、AudioSource / VRC Spatial Audio Source を検索します。",
             MessageType.Info);
 
 #if VRC_SDK_VRCSDK3
         // 「VRCSpatialAudioSource を持っていないものだけ」に絞るオプション
         excludeVRCSpatialAudio = EditorGUILayout.ToggleLeft(
-            "VRC Spatial Audio Source が付いていないオブジェクトだけに絞り込む",
+            "AudioSource検索時、VRC Spatial Audio Source が付いていないオブジェクトだけに絞り込む",
             excludeVRCSpatialAudio);
-#else
-        EditorGUILayout.HelpBox(
-            "VRC SDK3 がないため、VRC Spatial Audio Source の有無による絞り込みは無効です。",
-            MessageType.Info);
 #endif
 
         EditorGUILayout.BeginHorizontal();
@@ -382,6 +462,12 @@ public class IKA3DCGExpansion2Editor : EditorWindow
         {
             SearchAudioSourceObjects();
         }
+#if VRC_SDK_VRCSDK3
+        if (GUILayout.Button("VRC Spatial Audio Source を検索"))
+        {
+            SearchVRCSpatialAudioObjects();
+        }
+#endif
         if (GUILayout.Button("クリア"))
         {
             resultObjects.Clear();
@@ -393,7 +479,7 @@ public class IKA3DCGExpansion2Editor : EditorWindow
     {
         resultObjects.Clear();
 
-        AudioSource[] sources = FindObjectsOfType<AudioSource>(true);
+        AudioSource[] sources = FindComponentsInScope<AudioSource>();
         foreach (var s in sources)
         {
             if (s == null) continue;
@@ -413,6 +499,26 @@ public class IKA3DCGExpansion2Editor : EditorWindow
 
         Debug.Log("AudioSource を持つオブジェクト: " + resultObjects.Count + " 件");
     }
+
+#if VRC_SDK_VRCSDK3
+    // VRC Spatial Audio Source を持つオブジェクトだけを検索
+    void SearchVRCSpatialAudioObjects()
+    {
+        resultObjects.Clear();
+
+        VRCSpatialAudioSource[] spatialSources = FindComponentsInScope<VRCSpatialAudioSource>();
+        foreach (var s in spatialSources)
+        {
+            if (s == null) continue;
+            GameObject go = s.gameObject;
+            if (go == null) continue;
+
+            resultObjects.Add(go);
+        }
+
+        Debug.Log("VRCSpatialAudioSource を持つオブジェクト: " + resultObjects.Count + " 件");
+    }
+#endif
 
     // ============================================================
     // ■ 検索結果 GUI
