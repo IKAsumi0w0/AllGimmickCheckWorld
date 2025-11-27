@@ -1192,7 +1192,7 @@ MonoBehaviour:
   Near: 0
   VolumetricRadius: 0
   EnableSpatialization: 1
-  UseAudioSourceVolumeCurve: 0
+  UseAudioSourceVolumeCurve: 1
 --- !u!1 &2592972468139844760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,7 +1746,7 @@ MonoBehaviour:
   Near: 0
   VolumetricRadius: 0
   EnableSpatialization: 1
-  UseAudioSourceVolumeCurve: 0
+  UseAudioSourceVolumeCurve: 1
 --- !u!1 &3260690023325198796
 GameObject:
   m_ObjectHideFlags: 0
@@ -2816,6 +2816,11 @@ PrefabInstance:
         type: 3}
       propertyPath: Near
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785861615653279857, guid: e071dd1085676b74f827d4086473e6aa,
+        type: 3}
+      propertyPath: UseAudioSourceVolumeCurve
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4045856531097675080, guid: e071dd1085676b74f827d4086473e6aa,
         type: 3}

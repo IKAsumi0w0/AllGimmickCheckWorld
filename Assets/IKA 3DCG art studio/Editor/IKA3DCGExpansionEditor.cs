@@ -90,6 +90,9 @@ public class IKA3DCGExpansionEditor : EditorWindow
     static int _selectionCount;
     List<GameObject> _recentSelectionCache = new List<GameObject>();
 
+    // 最上位 Prefab 選択用フィルタ（この文字列を含む最上位 Prefab は除外）
+    string _excludeTopPrefabName = "";
+
     // --- Collider Generation ---
     string _addName = "Pickup";
     float _colliderScale = 1f;
@@ -147,6 +150,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
     // =========================
     void OnEnable() { Selection.selectionChanged += OnSelectionChanged; }
     void OnDisable() { Selection.selectionChanged -= OnSelectionChanged; }
+
     void OnSelectionChanged()
     {
         _selectionCount = Selection.objects.Length;
@@ -170,6 +174,12 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
         Space(8);
         EditorGUILayout.LabelField($"選択オブジェクト数：{_selectionCount}");
+
+        // ▼ 最上位 Prefab 選択用フィルタ＋ボタン
+        _excludeTopPrefabName = EditorGUILayout.TextField(
+            "除外する最上位 Prefab 名（部分一致）",
+            _excludeTopPrefabName
+        );
 
         if (GUILayout.Button("シーン内の 最上位 Prefab インスタンス をすべて選択"))
             SelectAllPrefabsInOpenScenes();
@@ -819,6 +829,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
     void SelectAllPrefabsInOpenScenes()
     {
         var result = new List<GameObject>();
+        string filter = _excludeTopPrefabName;
 
         int sceneCount = EditorSceneManager.sceneCount;
         for (int i = 0; i < sceneCount; i++)
@@ -829,35 +840,49 @@ public class IKA3DCGExpansionEditor : EditorWindow
             var roots = scene.GetRootGameObjects();
             for (int r = 0; r < roots.Length; r++)
             {
-                CollectPrefabInstancesRecursive(roots[r].transform, result);
+                // ルートから下を再帰的に探索して、
+                // 「そのサブツリー内での最上位Prefab」を集める
+                CollectTopPrefabsUnder(roots[r].transform, result, filter);
             }
         }
 
         Selection.objects = result.ToArray();
         _selectionCount = result.Count;
 
-        Debug.Log($"[IKA] シーン内の 最上位 Prefab インスタンス を {result.Count} 個選択しました。");
+        Debug.Log($"[IKA] シーン内の 最上位 Prefab インスタンス を {result.Count} 個選択しました。" +
+            (string.IsNullOrEmpty(filter) ? "" : $"（除外フィルタ: \"{filter}\"）"));
     }
 
-    void CollectPrefabInstancesRecursive(Transform tr, List<GameObject> list)
+    // 指定 Transform 以下から「そのサブツリー内で最上位の Prefab ルート」を拾う
+    // ・Transform 自身が Prefab ルートの場合
+    //   - 名前がフィルタに一致しない → そのオブジェクトを結果に追加し、子には潜らない（その位置での最上位）
+    //   - 名前がフィルタに一致する → そのオブジェクトは追加せず、子階層をさらに探索して中の Prefab を探す
+    // ・Prefab でない場合 → 子階層を探索
+    void CollectTopPrefabsUnder(Transform t, List<GameObject> list, string filter)
     {
-        GameObject go = tr.gameObject;
+        GameObject go = t.gameObject;
+        bool isPrefabRoot = PrefabUtility.IsAnyPrefabInstanceRoot(go);
 
-        var status = PrefabUtility.GetPrefabInstanceStatus(go);
-
-        // 最上位の Prefab インスタンスだけを対象にする
-        if (status != PrefabInstanceStatus.NotAPrefab)
+        if (isPrefabRoot)
         {
-            GameObject outer = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
-            if (outer == go)
+            bool excluded = !string.IsNullOrEmpty(filter) && go.name.Contains(filter);
+
+            if (!excluded)
             {
                 if (!list.Contains(go))
                     list.Add(go);
+
+                // このPrefabが「このサブツリーでの最上位」なので、
+                // その子階層には潜らない
+                return;
             }
+            // excluded の場合 → 自身は追加せず、子階層に潜ってさらに Prefab を探す
         }
 
-        for (int i = 0; i < tr.childCount; i++)
-            CollectPrefabInstancesRecursive(tr.GetChild(i), list);
+        // Prefab ルートでない、またはフィルタで除外されたPrefabルートの場合は
+        // 子階層を再帰的に探索
+        for (int i = 0; i < t.childCount; i++)
+            CollectTopPrefabsUnder(t.GetChild(i), list, filter);
     }
 
     // =========================
@@ -1393,7 +1418,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
             string pattern = @"guid:\s*" + Regex.Escape(oldGuid);
             string replaced = Regex.Replace(text, pattern, "guid: " + newGuid);
 
-            if (!string.Equals(text, replaced, StringComparison.Ordinal))
+            if (!string.IsNullOrEmpty(replaced) && !string.Equals(text, replaced, StringComparison.Ordinal))
                 File.WriteAllText(metaPath, replaced, new UTF8Encoding(false));
         }
     }
@@ -1523,7 +1548,7 @@ public class IKA3DCGExpansionEditor : EditorWindow
 
         int pressed = EditorUtility.DisplayDialogComplex(
             "Prefab 内のオブジェクトです",
-            $"はのPrefab内にあります。Prefabを解除しますか？",
+            $"{childObj.name} は Prefab 内のオブジェクトです。Prefab を解除しますか？",
             "はい（解除して続行）", "キャンセル", "いいえ（解除せず続行）"
         );
 
@@ -1537,6 +1562,9 @@ public class IKA3DCGExpansionEditor : EditorWindow
     }
 }
 
+// =========================
+// ヒエラルキー順比較ユーティリティ
+// =========================
 public static class TransformPathUtil
 {
     public static string GetHierarchyPath(this Transform t)

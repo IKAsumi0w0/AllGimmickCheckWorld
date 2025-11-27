@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -18,7 +18,6 @@ public class MoneyTreeMain : UdonSharpBehaviour
     [SerializeField] Transform _small;
     [SerializeField] float _r1;
     [SerializeField] float _randomR1Width;
-    int _objCount0 = 0;
 
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(Anime1stFlg))] bool _anime1stFlg = false;
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(Anime30sFlg))] bool _anime30sFlg = false;
@@ -55,11 +54,6 @@ public class MoneyTreeMain : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-        _objCount0 = _pickup0.Length;
-    }
-
     void Update()
     {
         if (Networking.LocalPlayer.IsOwner(gameObject) && !Anime30sFlg)
@@ -83,10 +77,10 @@ public class MoneyTreeMain : UdonSharpBehaviour
     {
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
-            for (int i = 0; i < _objCount0; i++)
+            for (int i = 0; i < _pickup0.Length; i++)
             {
                 // 角度を計算（等間隔）
-                float angle = i * Mathf.PI * 2f / _objCount0;
+                float angle = i * Mathf.PI * 2f / _pickup0.Length;
                 float x = Mathf.Cos(angle) * _r0;
                 float z = Mathf.Sin(angle) * _r0;
 
@@ -124,7 +118,7 @@ public class MoneyTreeMain : UdonSharpBehaviour
     {
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
-            for (int i = 0; i < _objCount0; i++)
+            for (int i = 0; i < _pickup0.Length; i++)
             {
                 _pickup0[i]._main.Reset();
             }
