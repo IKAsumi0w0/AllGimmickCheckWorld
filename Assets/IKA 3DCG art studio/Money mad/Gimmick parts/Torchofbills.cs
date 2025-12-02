@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -6,27 +6,16 @@ using VRC.Udon;
 
 public class Torchofbills : UdonSharpBehaviour
 {
-    [SerializeField] private GameObject _obj;
-    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ToggleObj))] private bool _flg = false;
-
-    public bool ToggleObj
-    {
-        get => _flg;
-        set
-        {
-            _flg = value;
-            _obj.SetActive(_flg);
-        }
-    }
+    [SerializeField] TorchofbillsMain _main;
 
     public override void OnPickup()
     {
-        Networking.SetOwner(Networking.LocalPlayer, gameObject);
-        ToggleObj = true;
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        _main.MainPickup();
     }
 
     public override void OnDrop()
     {
-        ToggleObj = false;
+        _main.MainDrop();
     }
 }

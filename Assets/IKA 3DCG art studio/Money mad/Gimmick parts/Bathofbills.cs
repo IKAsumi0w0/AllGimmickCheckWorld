@@ -1,12 +1,13 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class Bathofbills : UdonSharpBehaviour
 {
-    [SerializeField] private GameObject _model;
+    [SerializeField] GameObject _model;
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ModelSwitch))] private bool _flg = false;
 
     public bool ModelSwitch
@@ -19,25 +20,10 @@ public class Bathofbills : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-
-    }
-
     public override void Interact()
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(ShowSwitch));
-    }
-
-    public void ShowSwitch()
-    {
-        if (ModelSwitch)
-        {
-            ModelSwitch = false;
-        }
-        else
-        {
-            ModelSwitch = true;
-        }
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        ModelSwitch = !ModelSwitch;
+        RequestSerialization();
     }
 }

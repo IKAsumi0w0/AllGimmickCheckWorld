@@ -1,9 +1,10 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class Gardenfaucet_01_Handle_Gimmick : UdonSharpBehaviour
 {
     [SerializeField] private Animator _anime;
@@ -19,25 +20,10 @@ public class Gardenfaucet_01_Handle_Gimmick : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-
-    }
-
     public override void Interact()
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(ShowSwitch));
-    }
-
-    public void ShowSwitch()
-    {
-        if (AnimeSwitch)
-        {
-            AnimeSwitch = false;
-        }
-        else
-        {
-            AnimeSwitch = true;
-        }
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        AnimeSwitch = !AnimeSwitch;
+        RequestSerialization();
     }
 }

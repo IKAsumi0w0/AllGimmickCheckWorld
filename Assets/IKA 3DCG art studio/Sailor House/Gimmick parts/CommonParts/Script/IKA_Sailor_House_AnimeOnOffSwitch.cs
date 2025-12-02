@@ -4,11 +4,12 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class IKA_Sailor_House_AnimeOnOffSwitch : UdonSharpBehaviour
 {
     public Animator animator;
     [SerializeField] bool _startFlg = false;
-    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ToggleAnimeSwitch))] private bool _flg = false;
+    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ToggleAnimeSwitch))] public bool _flg = false;
 
     public bool ToggleAnimeSwitch
     {
@@ -20,19 +21,10 @@ public class IKA_Sailor_House_AnimeOnOffSwitch : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-        ToggleAnimeSwitch = _startFlg;
-    }
-
     public override void Interact()
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(SwitchAnime));
-    }
-
-    public void SwitchAnime()
-    {
-        if (ToggleAnimeSwitch) ToggleAnimeSwitch = false;
-        else ToggleAnimeSwitch = true;
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        ToggleAnimeSwitch = !ToggleAnimeSwitch;
+        RequestSerialization();
     }
 }

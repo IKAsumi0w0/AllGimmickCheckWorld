@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -25,11 +25,6 @@ public class HalloweenSpoon_Pickup : UdonSharpBehaviour
     void Start()
     {
         ShowFlg = false;
-    }
-
-    void Update()
-    {
-
     }
 
     public override void OnPickup()

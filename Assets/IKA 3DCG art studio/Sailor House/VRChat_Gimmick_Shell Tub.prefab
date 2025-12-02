@@ -453,6 +453,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 9135189334769892602}
   _anime: {fileID: 9135189335229381812}
+  _updateInterval: 5
+  _jitterChance: 0.1
 --- !u!114 &9135189334769892602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,7 +474,7 @@ MonoBehaviour:
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
-  _syncMethod: 2
+  _syncMethod: 3
   serializedProgramAsset: {fileID: 11400000, guid: 309ade0cc5619f146a54095e98582466,
     type: 2}
   programSource: {fileID: 11400000, guid: f94cfee190b7f4b4ba08d05e05c00409, type: 2}

@@ -1,4 +1,4 @@
-﻿
+
 using Newtonsoft.Json.Linq;
 using System;
 using UdonSharp;
@@ -322,34 +322,54 @@ public class RealCharger_PickupMain : UdonSharpBehaviour
         if (!ChocoFlg && AddChocoFlg)
         {
             AddChocoValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddChocoValue) AddChocoValue -= Time.deltaTime;
+            if (0 < AddChocoValue)
+            {
+                AddChocoValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
         if (!ChocoFlg && AddMintFlg)
         {
             AddMintValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddMintValue) AddMintValue -= Time.deltaTime;
+            if (0 < AddMintValue)
+            {
+                AddMintValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
         if (!ChocoFlg && AddPinkFlg)
         {
             AddPinkValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddPinkValue) AddPinkValue -= Time.deltaTime;
+            if (0 < AddPinkValue)
+            {
+                AddPinkValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
         if (!ChocoFlg && AddWhiteFlg)
         {
             AddWhiteValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddWhiteValue) AddWhiteValue -= Time.deltaTime;
+            if (0 < AddWhiteValue)
+            {
+                AddWhiteValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
     }
 

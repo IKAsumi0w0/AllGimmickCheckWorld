@@ -12,9 +12,12 @@ public class ShapedRiceBall_Manager : UdonSharpBehaviour
     [SerializeField] GameObject _mrFull;
     [SerializeField] GameObject _mrEmpty;
 
-    [Header("処理間隔（フレーム単位）")]
-    [SerializeField] int _checkIntervalFrames = 5; // ← 何フレームごとにチェックするか
-    int _frameCounter = 0; // 内部カウンタ
+    // 任意フレームごとに処理
+    [SerializeField] int _updateInterval = 5;
+    // たまに1フレーム増やす確率（0〜1）
+    [SerializeField] float _jitterChance = 0.1f;
+    int _frameCounter;
+    int _jitterOffset;
 
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ShowFlg))] bool _showFlg = false;
 
@@ -32,32 +35,37 @@ public class ShapedRiceBall_Manager : UdonSharpBehaviour
 
     void Update()
     {
-        if (!Networking.LocalPlayer.IsOwner(gameObject)) return;
-
-        // --- 指定フレーム間隔ごとに実行 ---
-        _frameCounter++;
-        if (_frameCounter < _checkIntervalFrames) return;
-        _frameCounter = 0; // リセット
-
-        // --- チェック処理本体 ---
-        if (_lidObj.transform.localPosition != Vector3.zero)
+        if (Networking.LocalPlayer.IsOwner(gameObject))
         {
-            for (int i = 0; i < _objs.Length; i++)
+            _frameCounter++;
+            // 指定間隔 + ジッター に一致したときだけ処理
+            if (_frameCounter % (_updateInterval + _jitterOffset) != 0)
             {
-                if (_objs[i].transform.localPosition == Vector3.zero)
-                {
-                    ShowFlg = true;
-                    RequestSerialization();
-                    return;
-                }
+                return;
             }
-            ShowFlg = false;
-            RequestSerialization();
-        }
-        else
-        {
-            ShowFlg = false;
-            RequestSerialization();
+            // 1フレーム増やす処理
+            _jitterOffset = Random.value < _jitterChance ? 1 : 0;
+
+            // --- チェック処理本体 ---
+            if (_lidObj.transform.localPosition != Vector3.zero)
+            {
+                for (int i = 0; i < _objs.Length; i++)
+                {
+                    if (_objs[i].transform.localPosition == Vector3.zero)
+                    {
+                        ShowFlg = true;
+                        RequestSerialization();
+                        return;
+                    }
+                }
+                ShowFlg = false;
+                RequestSerialization();
+            }
+            else
+            {
+                ShowFlg = false;
+                RequestSerialization();
+            }
         }
     }
 }

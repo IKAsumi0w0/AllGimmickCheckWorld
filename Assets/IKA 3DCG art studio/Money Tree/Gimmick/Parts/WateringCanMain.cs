@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -33,9 +33,22 @@ public class WateringCanMain : UdonSharpBehaviour
             Vector3 forwardDirection = transform.right;
             Vector3 downDirection = Vector3.down;
             float dotProduct = Vector3.Dot(forwardDirection, downDirection);
-            if (dotProduct > threshold) PSFlg = true;
-            else PSFlg = false;
-            RequestSerialization();
+            if (dotProduct > threshold)
+            {
+                if (!PSFlg)
+                {
+                    PSFlg = true;
+                    RequestSerialization();
+                }
+            }
+            else
+            {
+                if (PSFlg)
+                {
+                    PSFlg = false;
+                    RequestSerialization();
+                }
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using UdonSharp;
 using UnityEngine;
@@ -168,7 +168,7 @@ public class HeartFork_PickupMain : UdonSharpBehaviour
             _addChocoValue = value;
             if (!ChocoFlg && 1.5 < _addChocoValue)
             {
-                PointedFood = "Choco";
+                if (Networking.LocalPlayer.IsOwner(gameObject)) PointedFood = "Choco";
                 _chocoAS.Stop();
             }
         }
@@ -193,7 +193,7 @@ public class HeartFork_PickupMain : UdonSharpBehaviour
             _addMintValue = value;
             if (!ChocoFlg && 1.5 < _addMintValue)
             {
-                PointedFood = "Mint";
+                if (Networking.LocalPlayer.IsOwner(gameObject)) PointedFood = "Mint";
                 _chocoAS.Stop();
             }
         }
@@ -218,7 +218,7 @@ public class HeartFork_PickupMain : UdonSharpBehaviour
             _addPinkValue = value;
             if (!ChocoFlg && 1.5 < _addPinkValue)
             {
-                PointedFood = "Pink";
+                if (Networking.LocalPlayer.IsOwner(gameObject)) PointedFood = "Pink";
                 _chocoAS.Stop();
             }
         }
@@ -243,7 +243,7 @@ public class HeartFork_PickupMain : UdonSharpBehaviour
             _addWhiteValue = value;
             if (!ChocoFlg && 1.5 < _addWhiteValue)
             {
-                PointedFood = "White";
+                if (Networking.LocalPlayer.IsOwner(gameObject)) PointedFood = "White";
                 _chocoAS.Stop();
             }
         }
@@ -300,34 +300,54 @@ public class HeartFork_PickupMain : UdonSharpBehaviour
         if (!ChocoFlg && AddChocoFlg)
         {
             AddChocoValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddChocoValue) AddChocoValue -= Time.deltaTime;
+            if (0 < AddChocoValue)
+            {
+                AddChocoValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
         if (!ChocoFlg && AddMintFlg)
         {
             AddMintValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddMintValue) AddMintValue -= Time.deltaTime;
+            if (0 < AddMintValue)
+            {
+                AddMintValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
         if (!ChocoFlg && AddPinkFlg)
         {
             AddPinkValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddPinkValue) AddPinkValue -= Time.deltaTime;
+            if (0 < AddPinkValue)
+            {
+                AddPinkValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
         if (!ChocoFlg && AddWhiteFlg)
         {
             AddWhiteValue += Time.deltaTime;
+            RequestSerialization();
         }
         else
         {
-            if (0 < AddWhiteValue) AddWhiteValue -= Time.deltaTime;
+            if (0 < AddWhiteValue)
+            {
+                AddWhiteValue -= Time.deltaTime;
+                RequestSerialization();
+            }
         }
     }
 

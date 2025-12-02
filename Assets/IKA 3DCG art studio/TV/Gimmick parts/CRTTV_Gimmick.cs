@@ -4,6 +4,7 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class CRTTV_Gimmick : UdonSharpBehaviour
 {
     [SerializeField] GameObject _offObj;
@@ -38,5 +39,6 @@ public class CRTTV_Gimmick : UdonSharpBehaviour
     public void ShowSwitch()
     {
         ModelSwitch = !ModelSwitch;
+        RequestSerialization();
     }
 }

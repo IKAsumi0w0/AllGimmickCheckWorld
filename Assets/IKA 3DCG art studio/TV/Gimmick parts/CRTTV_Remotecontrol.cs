@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -6,7 +6,7 @@ using VRC.Udon;
 
 public class CRTTV_Remotecontrol : UdonSharpBehaviour
 {
-    [SerializeField] private CRTTV_Gimmick _tvObj;
+    [SerializeField] CRTTV_Gimmick _tvObj;
 
     public override void OnPickup()
     {

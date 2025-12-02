@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -11,6 +11,7 @@ public class Bunkbeds_L_Curtains_L01_Gimmick : UdonSharpBehaviour
     [SerializeField] SkinnedMeshRenderer _smr;
     [SerializeField] Vector3 _limitPos;
     Vector3 _pos;
+    bool _toggle;
 
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ShapeKeyFloat))] float _shapeFloat = 0;
 
@@ -24,15 +25,12 @@ public class Bunkbeds_L_Curtains_L01_Gimmick : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
+            _toggle = !_toggle;
+            if (_toggle) return;
             _pos = _pickup.localPosition;
             _pickup.localPosition = new Vector3(_pos.x, 0f, 0f);
             _pickup.localRotation = Quaternion.Euler(Vector3.zero);

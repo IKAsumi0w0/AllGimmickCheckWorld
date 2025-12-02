@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -104,11 +104,6 @@ public class MochiMain : UdonSharpBehaviour
     {
         FlgSwitchInt = Random.Range(0, 6);
         ObjSwitchInt = Random.Range(0, 2);
-    }
-
-    private void Update()
-    {
-        //Debug1();
     }
 
     void OnTriggerStay(Collider c)

@@ -141,11 +141,6 @@ public class Ochazuke_Gimmick : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         if (Networking.LocalPlayer.IsOwner(gameObject))

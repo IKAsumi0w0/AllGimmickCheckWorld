@@ -32,6 +32,12 @@ public class WholeCake_PickupMain : UdonSharpBehaviour
     [SerializeField] GameObject _bomPS;
     [SerializeField] BurntCake_PickupMain[] _burntChipObj;
     [SerializeField] float _wide = 0.04f;
+    // 任意フレームごとに処理
+    [SerializeField] int _updateInterval = 5;
+    // たまに1フレーム増やす確率（0〜1）
+    [SerializeField] float _jitterChance = 0.1f;
+    int _frameCounter;
+    int _jitterOffset;
 
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(DisplayFlg))] bool _displayFlg = true;
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(CandleNormalCount))] int _candleNormalCount = 0;
@@ -119,14 +125,24 @@ public class WholeCake_PickupMain : UdonSharpBehaviour
 
     void Update()
     {
-        if (Networking.LocalPlayer.IsOwner(gameObject) && 
-            !(0 == CandleNormalCount && !CandleNumFlg && !CandleHappyBirthdayFlg && !CandleAnnivFlg) &&
-
-            !CheckLightingFlg && CandleNormalCount + LightingOptionCount <= LightingCount)
+        if (Networking.LocalPlayer.IsOwner(gameObject))
         {
-            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, ExplosionFlg ? nameof(PlayBomBGM) : nameof(PlayNormalBGM));
-            CheckLightingFlg = true;
-            RequestSerialization();
+            _frameCounter++;
+            // 指定間隔 + ジッター に一致したときだけ処理
+            if (_frameCounter % (_updateInterval + _jitterOffset) != 0)
+            {
+                return;
+            }
+            // 1フレーム増やす処理
+            _jitterOffset = Random.value < _jitterChance ? 1 : 0;
+
+            if (!(0 == CandleNormalCount && !CandleNumFlg && !CandleHappyBirthdayFlg && !CandleAnnivFlg) &&
+                !CheckLightingFlg && CandleNormalCount + LightingOptionCount <= LightingCount)
+            {
+                SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, ExplosionFlg ? nameof(PlayBomBGM) : nameof(PlayNormalBGM));
+                CheckLightingFlg = true;
+                RequestSerialization();
+            }
         }
     }
 

@@ -59,11 +59,6 @@ public class RicePaddle_Gimmick : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         if (Networking.LocalPlayer.IsOwner(gameObject))
@@ -91,17 +86,6 @@ public class RicePaddle_Gimmick : UdonSharpBehaviour
     public void MainPickup()
     {
         if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
-        //for (int i = 0; i < _setPosTrans.childCount; i++)
-        //{
-        //    RicePaddle_Pickup sbp = _setPosTrans.GetChild(i).gameObject.GetComponent<RicePaddle_Pickup>();
-        //    if (sbp != null)
-        //    {
-        //        Networking.SetOwner(Networking.LocalPlayer, sbp.gameObject);
-        //        Networking.SetOwner(Networking.LocalPlayer, sbp._main.gameObject);
-        //        _setPosTrans.GetChild(i).localPosition = Vector3.zero;
-        //        _setPosTrans.GetChild(i).localRotation = Quaternion.identity;
-        //    }
-        //}
     }
 
     public void MainPickupUseDown()

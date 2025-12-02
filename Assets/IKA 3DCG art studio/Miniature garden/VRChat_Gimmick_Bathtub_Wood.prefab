@@ -5093,6 +5093,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5454141374673706556}
   _anime: {fileID: 5454141374654695557}
+  _updateInterval: 5
+  _jitterChance: 0.1
 --- !u!114 &5454141374673706556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5106,13 +5108,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactTextPlacement: {fileID: 0}
-  interactText: Use
+  interactText: Faucet
   interactTextGO: {fileID: 0}
-  proximity: 2
+  proximity: 0.5
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
-  _syncMethod: 2
+  _syncMethod: 3
   serializedProgramAsset: {fileID: 11400000, guid: b533dc25a77b74a45bdf5a8161319761,
     type: 2}
   programSource: {fileID: 11400000, guid: 924ee270047d83448b9aa2356f4f8421, type: 2}

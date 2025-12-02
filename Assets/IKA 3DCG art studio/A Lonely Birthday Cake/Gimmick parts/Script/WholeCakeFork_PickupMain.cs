@@ -1,4 +1,4 @@
-﻿
+
 using System.Runtime.InteropServices;
 using UdonSharp;
 using UnityEngine;
@@ -64,21 +64,21 @@ public class WholeCakeFork_PickupMain : UdonSharpBehaviour
 
     void Update()
     {
-        if (_debugText != null)
-        {
-            VRCPlayerApi owner = Networking.GetOwner(gameObject);
-            VRCPlayerApi owner1 = Networking.GetOwner(gameObject.transform.parent.gameObject);
-            string n = "";
-            if (owner != null) n = owner.displayName;
-            else n = "null";
-            string n1 = "";
-            if (owner1 != null) n1 = owner1.displayName;
-            else n1 = "null";
-            _debugText.text =
-                $"SetFlg: {SetFlg}\n" +
-                $"nameSub:{n1}\n" +
-                $"name:{n}";
-        }
+        //if (_debugText != null)
+        //{
+        //    VRCPlayerApi owner = Networking.GetOwner(gameObject);
+        //    VRCPlayerApi owner1 = Networking.GetOwner(gameObject.transform.parent.gameObject);
+        //    string n = "";
+        //    if (owner != null) n = owner.displayName;
+        //    else n = "null";
+        //    string n1 = "";
+        //    if (owner1 != null) n1 = owner1.displayName;
+        //    else n1 = "null";
+        //    _debugText.text =
+        //        $"SetFlg: {SetFlg}\n" +
+        //        $"nameSub:{n1}\n" +
+        //        $"name:{n}";
+        //}
     }
 
     public void MainPickup()

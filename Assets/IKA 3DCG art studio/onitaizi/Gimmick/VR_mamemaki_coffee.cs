@@ -1,6 +1,7 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -17,6 +18,24 @@ public class VR_mamemaki_coffee : UdonSharpBehaviour
         {
             _pickupFlg = value;
             _pickupObj.SetActive(_pickupFlg);
+        }
+    }
+
+    void Start()
+    {
+        VRCPlayerApi player = Networking.LocalPlayer;
+        VRC_Pickup vRC_Pickup = (VRC_Pickup)this.gameObject.GetComponent(typeof(VRC_Pickup));
+        if (player.IsUserInVR())
+        {
+            PickupFlg = true;
+            vRC_Pickup.orientation = VRC_Pickup.PickupOrientation.Any;
+            _pickupObj.transform.localPosition = Vector3.zero;
+
+        }
+        else
+        {
+            PickupFlg = false;
+            vRC_Pickup.orientation = VRC_Pickup.PickupOrientation.Grip;
         }
     }
 

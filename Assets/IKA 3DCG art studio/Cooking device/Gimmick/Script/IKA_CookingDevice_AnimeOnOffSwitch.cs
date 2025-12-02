@@ -4,10 +4,11 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class IKA_CookingDevice_AnimeOnOffSwitch : UdonSharpBehaviour
 {
     public Animator animator;
-    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ToggleAnimeSwitch))] private bool _flg = false;
+    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ToggleAnimeSwitch))] public bool _flg = false;
 
     public bool ToggleAnimeSwitch
     {
@@ -26,7 +27,7 @@ public class IKA_CookingDevice_AnimeOnOffSwitch : UdonSharpBehaviour
 
     public void SwitchAnime()
     {
-        if (ToggleAnimeSwitch) ToggleAnimeSwitch = false;
-        else ToggleAnimeSwitch = true;
+        ToggleAnimeSwitch = !ToggleAnimeSwitch;
+        RequestSerialization();
     }
 }

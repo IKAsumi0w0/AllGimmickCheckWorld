@@ -1,9 +1,10 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class IKA_FireworksIgnition : UdonSharpBehaviour
 {
     [SerializeField] private GameObject _psObj;
@@ -21,19 +22,8 @@ public class IKA_FireworksIgnition : UdonSharpBehaviour
 
     public override void Interact()
     {
-        if (Networking.LocalPlayer.IsOwner(this.gameObject))
-        {
-            Extinguish();
-        }
-        else
-        {
-            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(Extinguish));
-        }
-    }
-
-    public void Extinguish()
-    {
-        if (TogglePsObj) TogglePsObj = false;
-        else TogglePsObj = true;
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        TogglePsObj = !TogglePsObj;
+        RequestSerialization();
     }
 }

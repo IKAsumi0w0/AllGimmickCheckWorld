@@ -50,11 +50,6 @@ public class PickleJarwithUmeboshiGimmick : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-        InteractionText = "3 use position reset";
-    }
-
     void Update()
     {
         if (Networking.LocalPlayer.IsOwner(gameObject))

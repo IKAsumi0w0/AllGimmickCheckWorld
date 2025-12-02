@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -10,6 +10,13 @@ public class HalloweenTeaParty_Gimmick : UdonSharpBehaviour
     [SerializeField] SkinnedMeshRenderer _skinMeshR;
     [SerializeField] GameObject _psObj;
     [SerializeField] HalloweenTeaParty_Coll _htpc;
+    // 任意フレームごとに処理
+    [SerializeField] int _updateInterval = 3;
+    // たまに1フレーム増やす確率（0〜1）
+    [SerializeField] float _jitterChance = 0.1f;
+    int _frameCounter;
+    int _jitterOffset;
+    float _checkFloat = 0;
     bool _pickupUseFlg = false;
 
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ShapekeyFloat))] float _shapekeyFloat = 100;
@@ -35,13 +42,24 @@ public class HalloweenTeaParty_Gimmick : UdonSharpBehaviour
 
     void Update()
     {
-        if (Networking.LocalPlayer.IsOwner(this.gameObject))
+        if (Networking.LocalPlayer.IsOwner(gameObject))
         {
             if (_pickupUseFlg)
             {
                 ShapekeyFloat += 0.5f;
             }
-            RequestSerialization();
+            _frameCounter++;
+            // 指定間隔 + ジッター に一致したときだけ処理
+            if (_frameCounter % (_updateInterval + _jitterOffset) == 0)
+            {
+                // 1フレーム増やす処理
+                _jitterOffset = Random.value < _jitterChance ? 1 : 0;
+                if (_checkFloat != ShapekeyFloat)
+                {
+                    _checkFloat = ShapekeyFloat;
+                    RequestSerialization();
+                }
+            }
         }
     }
 

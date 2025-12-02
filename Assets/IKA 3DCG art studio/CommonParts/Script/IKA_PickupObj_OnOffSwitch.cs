@@ -4,6 +4,7 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class IKA_PickupObj_OnOffSwitch : UdonSharpBehaviour
 {
     [SerializeField] private GameObject _obj;
@@ -53,12 +54,13 @@ public class IKA_PickupObj_OnOffSwitch : UdonSharpBehaviour
 
     public void SwitchOnOff()
     {
-        if (ToggleObj) ToggleObj = false;
-        else ToggleObj = true;
+        ToggleObj = !ToggleObj;
+        RequestSerialization();
     }
 
     public void SwitchOff()
     {
         ToggleObj = false;
+        RequestSerialization();
     }
 }

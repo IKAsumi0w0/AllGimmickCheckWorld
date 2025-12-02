@@ -1,4 +1,4 @@
-﻿using UdonSharp;
+using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -9,6 +9,12 @@ public class CakeCandleBase : UdonSharpBehaviour
     public WholeCake_PickupMain _wcpm;
     [SerializeField] protected GameObject _fireObj;
     [SerializeField] protected BoxCollider _coll;
+    // 任意フレームごとに処理
+    [SerializeField] int _updateInterval = 3;
+    // たまに1フレーム増やす確率（0〜1）
+    [SerializeField] float _jitterChance = 0.1f;
+    int _frameCounter;
+    int _jitterOffset;
     protected VRCPlayerApi _p;
 
     [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(FireFlg))] protected bool _fireFlg = false;
@@ -58,6 +64,15 @@ public class CakeCandleBase : UdonSharpBehaviour
     {
         if (_p != null && DisplayFlg && !ProtectionFlg && FireFlg)
         {
+            _frameCounter++;
+            // 指定間隔 + ジッター に一致したときだけ処理
+            if (_frameCounter % (_updateInterval + _jitterOffset) != 0)
+            {
+                return;
+            }
+            // 1フレーム増やす処理
+            _jitterOffset = Random.value < _jitterChance ? 1 : 0;
+
             Vector3 headPosition = _p.GetTrackingData(VRCPlayerApi.TrackingDataType.Head).position;
             float dis = Vector3.Distance(transform.position, headPosition);
 
@@ -70,7 +85,7 @@ public class CakeCandleBase : UdonSharpBehaviour
 
     public void HideFire()
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(HideFireSub));
+        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(HideFireSub));
     }
 
     public void HideFireSub()

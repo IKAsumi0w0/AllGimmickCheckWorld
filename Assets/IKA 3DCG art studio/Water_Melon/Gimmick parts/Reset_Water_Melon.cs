@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -22,7 +22,7 @@ public class Reset_Water_Melon : UdonSharpBehaviour
         }
         else
         {
-            _reSetColl.SetActive(false);
+            if (_reSetColl.activeSelf) _reSetColl.SetActive(false);
         }
     }
 

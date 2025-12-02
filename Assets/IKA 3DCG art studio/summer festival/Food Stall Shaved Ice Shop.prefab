@@ -1723,6 +1723,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.147
       objectReference: {fileID: 0}
+    - target: {fileID: 150196296854843355, guid: 4c9844a076c24164aba3af5689d66ae6,
+        type: 3}
+      propertyPath: AllowCollisionOwnershipTransfer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 317083161247480191, guid: 4c9844a076c24164aba3af5689d66ae6,
         type: 3}
       propertyPath: version
@@ -1835,8 +1840,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2589764373566808587, guid: 4c9844a076c24164aba3af5689d66ae6,
         type: 3}
+      propertyPath: UseText
+      value: ' '
+      objectReference: {fileID: 0}
+    - target: {fileID: 2589764373566808587, guid: 4c9844a076c24164aba3af5689d66ae6,
+        type: 3}
       propertyPath: version
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2589764373566808587, guid: 4c9844a076c24164aba3af5689d66ae6,
+        type: 3}
+      propertyPath: proximity
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2589764373566808587, guid: 4c9844a076c24164aba3af5689d66ae6,
+        type: 3}
+      propertyPath: InteractionText
+      value: Syrup
       objectReference: {fileID: 0}
     - target: {fileID: 2871333884055644268, guid: 4c9844a076c24164aba3af5689d66ae6,
         type: 3}
@@ -1902,6 +1922,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a242d26c1aaeb1c4784ffbaa2ffca6ef,
         type: 2}
+    - target: {fileID: 6049452039965872279, guid: 4c9844a076c24164aba3af5689d66ae6,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6049452039965872279, guid: 4c9844a076c24164aba3af5689d66ae6,
+        type: 3}
     - target: {fileID: 6075050934006163110, guid: 4c9844a076c24164aba3af5689d66ae6,
         type: 3}
       propertyPath: version

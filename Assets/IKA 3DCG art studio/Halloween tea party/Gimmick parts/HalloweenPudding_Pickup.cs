@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Components;
@@ -23,16 +23,6 @@ public class HalloweenPudding_Pickup : UdonSharpBehaviour
                 Reset();
             }
         }
-    }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-
     }
 
     public override void OnPickup()

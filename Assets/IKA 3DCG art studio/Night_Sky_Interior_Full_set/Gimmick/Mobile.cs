@@ -1,9 +1,10 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class Mobile : UdonSharpBehaviour
 {
     [SerializeField] Animator _anim;
@@ -43,6 +44,7 @@ public class Mobile : UdonSharpBehaviour
         {
             AnimeSwitch = 1f;
         }
+        RequestSerialization();
     }
 
 }

@@ -1,13 +1,14 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class BarrelShelf_door_L : UdonSharpBehaviour
 {
     public Animator animator;
-    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ToggleAnimeSwitch))] private bool _flg = false;
+    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ToggleAnimeSwitch))] bool _flg = false;
 
     public bool ToggleAnimeSwitch
     {
@@ -21,12 +22,8 @@ public class BarrelShelf_door_L : UdonSharpBehaviour
 
     public override void Interact()
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(SwitchAnime));
-    }
-
-    public void SwitchAnime()
-    {
-        if (ToggleAnimeSwitch) ToggleAnimeSwitch = false;
-        else ToggleAnimeSwitch = true;
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        ToggleAnimeSwitch = !ToggleAnimeSwitch;
+        RequestSerialization();
     }
 }

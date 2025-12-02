@@ -71,11 +71,6 @@ public class Teacup_Gimmick : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if (Networking.LocalPlayer.IsOwner(gameObject))
