@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Components;
@@ -85,18 +85,18 @@ public class IKA3D_SpwnGimmickBase_PickupMain : UdonSharpBehaviour
     public virtual void Reset()
     {
         VRCPickup p = _sub.GetComponent<VRCPickup>();
-        if (p != null)
+        if (p != null && p.IsHeld) p.Drop();
+        SendCustomEventDelayedSeconds(nameof(SubReset), 0.5f, VRC.Udon.Common.Enums.EventTiming.Update);
+        if (DisplayFlg)
         {
-            p.Drop();
+            DisplayFlg = false;
+            RequestSerialization();
         }
-        DisplayFlg = false;
-        SendCustomEventDelayedSeconds(nameof(ResetSub), 2.5f, VRC.Udon.Common.Enums.EventTiming.Update);
-        RequestSerialization();
     }
 
-    public virtual void ResetSub()
+    public void SubReset()
     {
-        _sub.transform.localPosition = Vector3.zero;
-        _sub.transform.localRotation = Quaternion.identity;
+        _sub.gameObject.transform.localPosition = Vector3.zero;
+        _sub.gameObject.transform.localRotation = Quaternion.identity;
     }
 }

@@ -3,11 +3,13 @@ using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class Dial_02 : UdonSharpBehaviour
 {
     [SerializeField] GameObject _dropObj;
+    [SerializeField] Rigidbody _dropRB;
     [SerializeField] MeshRenderer _dialMR;
     [SerializeField] SphereCollider _coll;
     float _count = 0;
@@ -55,7 +57,7 @@ public class Dial_02 : UdonSharpBehaviour
                 _count += Time.deltaTime;
                 if (30f < _count)
                 {
-                    PoronReset();
+                    PoronReset1();
                 }
             }
         }
@@ -66,24 +68,16 @@ public class Dial_02 : UdonSharpBehaviour
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
             Dial_poron dial_Poron = coll.GetComponent<Dial_poron>();
-            if (dial_Poron != null)
+            if (_dropObj == coll.gameObject)
             {
                 _count = 0;
-                VRC_Pickup pickup = (VRC_Pickup)dial_Poron.gameObject.GetComponent(typeof(VRC_Pickup));
+                VRC_Pickup pickup = (VRC_Pickup)_dropObj.gameObject.GetComponent(typeof(VRC_Pickup));
                 if (pickup != null)
                 {
                     pickup.Drop();
                 }
-                Rigidbody rb = dial_Poron.gameObject.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.velocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
-                    dial_Poron.gameObject.transform.localPosition = Vector3.zero;
-                    dial_Poron.gameObject.transform.localRotation = Quaternion.identity;
-                }
-
-                PoronReset();
+                SendCustomNetworkEvent(NetworkEventTarget.All, nameof(PoronReset2));
+                PoronReset1();
             }
         }
     }
@@ -100,14 +94,23 @@ public class Dial_02 : UdonSharpBehaviour
         if (!DropModelSwitch)
         {
             CollModelSwitch = false;
-            SendCustomEventDelayedSeconds(nameof(CollTrueSwitch), 2f, VRC.Udon.Common.Enums.EventTiming.Update);
-            DropModelSwitch = true;
-            Dial02ModelSwitch = false;
-            Rigidbody rb = _dropObj.gameObject.GetComponent<Rigidbody>();
-            Vector3 force = this.gameObject.transform.forward * 1f;
-            rb.AddForce(force, ForceMode.Impulse);
+            SendCustomEventDelayedSeconds(nameof(DelayDropSwitch), 0.2f, VRC.Udon.Common.Enums.EventTiming.Update);
+            SendCustomEventDelayedSeconds(nameof(CollTrueSwitch), 3f, VRC.Udon.Common.Enums.EventTiming.Update);
             RequestSerialization();
         }
+    }
+
+    public void DelayDropSwitch()
+    {
+        DropModelSwitch = true;
+        Dial02ModelSwitch = false;
+        RequestSerialization();
+        SendCustomNetworkEvent(NetworkEventTarget.All, nameof(ShootDial));
+    }
+
+    public void ShootDial()
+    {
+        _dropRB.AddForce(gameObject.transform.forward, ForceMode.Impulse);
     }
 
     public void CollTrueSwitch()
@@ -116,10 +119,18 @@ public class Dial_02 : UdonSharpBehaviour
         RequestSerialization();
     }
 
-    public void PoronReset()
+    public void PoronReset1()
     {
         DropModelSwitch = false;
         Dial02ModelSwitch = true;
         RequestSerialization();
+    }
+
+    public void PoronReset2()
+    {
+        _dropRB.velocity = Vector3.zero;
+        _dropRB.angularVelocity = Vector3.zero;
+        _dropRB.gameObject.transform.localPosition = Vector3.zero;
+        _dropRB.gameObject.transform.localRotation = Quaternion.identity;
     }
 }

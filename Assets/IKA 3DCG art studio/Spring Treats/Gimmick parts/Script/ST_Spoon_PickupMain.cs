@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Components;
@@ -124,15 +124,24 @@ public class ST_Spoon_PickupMain : UdonSharpBehaviour
 
     public void Reset()
     {
-        VRCPickup p = (VRCPickup)_sub.GetComponent(typeof(VRCPickup));
-        if (p != null)
+        VRCPickup p = _sub.GetComponent<VRCPickup>();
+        if (p != null && p.IsHeld) p.Drop();
+        SendCustomEventDelayedSeconds(nameof(SubReset), 0.5f, VRC.Udon.Common.Enums.EventTiming.Update);
+        if (DisplayFlg)
         {
-            p.Drop();
+            DisplayFlg = false;
+            RequestSerialization();
         }
-        DisplayFlg = false;
-        SakuraFlg = false;
+        if (SakuraFlg)
+        {
+            SakuraFlg = false;
+            RequestSerialization();
+        }
+    }
+
+    public void SubReset()
+    {
         _sub.gameObject.transform.localPosition = Vector3.zero;
         _sub.gameObject.transform.localRotation = Quaternion.identity;
-        RequestSerialization();
     }
 }

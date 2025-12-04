@@ -1,13 +1,14 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class hinge : UdonSharpBehaviour
 {
     public Animator animator;
-    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(hingeFlg))] private bool _flg = false;
+    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(hingeFlg))] bool _flg = false;
 
     public bool hingeFlg
     {
@@ -21,12 +22,8 @@ public class hinge : UdonSharpBehaviour
 
     public override void Interact()
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(HingeAnime));
-    }
-
-    public void HingeAnime()
-    {
-        if (hingeFlg) hingeFlg = false;
-        else hingeFlg = true;
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        hingeFlg = !hingeFlg;
+        RequestSerialization();
     }
 }

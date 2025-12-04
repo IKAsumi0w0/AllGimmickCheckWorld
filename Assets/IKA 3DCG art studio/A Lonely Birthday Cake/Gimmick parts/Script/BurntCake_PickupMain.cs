@@ -1,6 +1,7 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -12,49 +13,73 @@ public class BurntCake_PickupMain : UdonSharpBehaviour
     public MeshRenderer _meshR;
     public Rigidbody _rb;
     public Collider _coll;
-    public Transform _parent;
-    public WholeCake_PickupMain _wcpm;
+    public ParentConstraint _constraint;
     float _throwForce = 5f;
     float _randomSpread = 2f;
 
-    public void Show()
+    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ThrowDirection))] Vector3 _throwDirection = Vector3.zero;
+    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(ThrowTorque))] Vector3 _throwTorque = Vector3.zero;
+    [UdonSynced(UdonSyncMode.None), FieldChangeCallback(nameof(DisplayState))] protected bool _displayState = false;
+
+    public Vector3 ThrowDirection
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(ShowSub));
+        get => _throwDirection;
+        set
+        {
+            _throwDirection = value;
+        }
     }
 
-    public void ShowSub()
+    public Vector3 ThrowTorque
     {
-        _rb.useGravity = true;
-        _rb.isKinematic = false;
-        SendCustomEventDelayedSeconds(nameof(DelayCollON), 0.1f, VRC.Udon.Common.Enums.EventTiming.Update);
-        _meshR.enabled = true;
-        _sub.transform.parent = null;
+        get => _throwTorque;
+        set
+        {
+            _throwTorque = value;
+        }
+    }
+
+    public bool DisplayState
+    {
+        get => _displayState;
+        set
+        {
+            _displayState = value;
+            _rb.useGravity = value;
+            _rb.isKinematic = !value;
+            _meshR.enabled = value;
+            _constraint.constraintActive = !value;
+            if (value)
+            {
+                SendCustomEventDelayedSeconds(nameof(DelayCollON), 0.1f, VRC.Udon.Common.Enums.EventTiming.Update);
+            }
+            else
+            {
+                _coll.enabled = false;
+                _rb.velocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
+            }
+        }
     }
 
     public void DelayCollON() => _coll.enabled = true;
 
-    public void HideSub()
+    public void SetThrowDirectionAndTorque()
     {
-        _rb.useGravity = false;
-        _rb.isKinematic = true;
-        _coll.enabled = false;
-        _meshR.enabled = false;
-        _sub.transform.parent = _parent;
-        _rb.velocity = Vector3.zero;
-        _rb.angularVelocity = Vector3.zero;
-        _sub.gameObject.transform.localPosition = Vector3.zero;
-        _sub.gameObject.transform.localRotation = Quaternion.identity;
-    }
 
-    public void SetFly()
-    {
-        Vector3 throwDirection = Vector3.up + new Vector3(
+        ThrowDirection = Vector3.up + new Vector3(
             Random.Range(-_randomSpread, _randomSpread) * 0.1f,
             0,
             Random.Range(-_randomSpread, _randomSpread) * 0.1f
         );
-        _rb.AddForce(throwDirection.normalized * _throwForce, ForceMode.Impulse);
-        _rb.AddTorque(Random.insideUnitSphere * _throwForce, ForceMode.Impulse);
+        ThrowTorque = Random.insideUnitSphere;
+        RequestSerialization();
+    }
+
+    public void ShootingBurntChip()
+    {
+        _rb.AddForce(ThrowDirection.normalized * _throwForce, ForceMode.Impulse);
+        _rb.AddTorque(ThrowTorque * _throwForce, ForceMode.Impulse);
     }
 
     public void MainPickup()
@@ -79,11 +104,12 @@ public class BurntCake_PickupMain : UdonSharpBehaviour
 
     public void Reset()
     {
-        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(ResetSub));
+        SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(ResetSub));
     }
 
     public void ResetSub()
     {
-        HideSub();
+        DisplayState = false;
+        RequestSerialization();
     }
 }

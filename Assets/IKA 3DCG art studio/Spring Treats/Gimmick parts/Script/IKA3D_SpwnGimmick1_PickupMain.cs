@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Components;
@@ -48,25 +48,20 @@ public class IKA3D_SpwnGimmick1_PickupMain : IKA3D_SpwnGimmickBase_PickupMain
     public override void FuncDisplayFlg_ONSub()
     {
         base.FuncDisplayFlg_ONSub();
-        MeshNo = 0;
-        RequestSerialization();
-    }
-    public override void Reset()
-    {
-        VRCPickup p = _sub.GetComponent<VRCPickup>();
-        if (p != null)
+        if (MeshNo != 0)
         {
-            p.Drop();
+            MeshNo = 0;
+            RequestSerialization();
         }
-        DisplayFlg = false;
-        MeshNo = 0;
-        SendCustomEventDelayedSeconds(nameof(ResetSub), 2.5f, VRC.Udon.Common.Enums.EventTiming.Update);
-        RequestSerialization();
     }
 
-    public override void ResetSub()
+    public override void Reset()
     {
-        _sub.transform.localPosition = Vector3.zero;
-        _sub.transform.localRotation = Quaternion.identity;
+        base.Reset();
+        if (MeshNo != 0)
+        {
+            MeshNo = 0;
+            RequestSerialization();
+        }
     }
 }

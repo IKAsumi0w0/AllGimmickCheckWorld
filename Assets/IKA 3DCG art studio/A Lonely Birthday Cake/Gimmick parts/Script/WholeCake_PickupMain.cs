@@ -30,7 +30,7 @@ public class WholeCake_PickupMain : UdonSharpBehaviour
 
     [SerializeField] AudioSource _bgm_N, _bgm_Bom;
     [SerializeField] GameObject _bomPS;
-    [SerializeField] BurntCake_PickupMain[] _burntChipObj;
+    [SerializeField] IKA_A_Lonely_Birthday_Cake_BurntChip _burntChipObjs;
     [SerializeField] float _wide = 0.04f;
     // 任意フレームごとに処理
     [SerializeField] int _updateInterval = 5;
@@ -179,6 +179,10 @@ public class WholeCake_PickupMain : UdonSharpBehaviour
     public void PlayBomBGM()
     {
         _bgm_Bom.Play();
+        if (Networking.LocalPlayer.IsOwner(gameObject))
+        {
+            _burntChipObjs.SetThrowDirectionAndTorque();
+        }
         SendCustomEventDelayedSeconds(nameof(PlayBomPS), 5f);
     }
 
@@ -186,14 +190,9 @@ public class WholeCake_PickupMain : UdonSharpBehaviour
     {
         _bomPS.SetActive(true);
         DisplayFlg = false;
-        RequestSerialization();
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
-            foreach (BurntCake_PickupMain item in _burntChipObj)
-            {
-                item.Show();
-                item.SetFly();
-            }
+            _burntChipObjs.ShootingBurntChip();
         }
         LightingCount = 0;
         LightingOptionCount = 0;
@@ -431,10 +430,7 @@ public class WholeCake_PickupMain : UdonSharpBehaviour
         _bgm_N.Stop();
         _bgm_Bom.Stop();
         _bomPS.SetActive(false);
-        foreach (BurntCake_PickupMain item in _burntChipObj)
-        {
-            item.HideSub();
-        }
+        _burntChipObjs.Reset();
         HideCandleSub(_trans0);
         HideCandleSub(_trans1);
         HideCandleNum();

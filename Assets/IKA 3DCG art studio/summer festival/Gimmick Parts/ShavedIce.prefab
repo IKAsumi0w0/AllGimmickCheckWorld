@@ -410,6 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllowCollisionOwnershipTransfer: 1
+  ForceKinematicOnRemote: 0
 --- !u!54 &2082762825010159795
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -469,6 +470,7 @@ MonoBehaviour:
   currentlyHeldBy: {fileID: 0}
   pickupable: 1
   proximity: 2
+  version: 0
 --- !u!1 &2082762825456505215
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +484,7 @@ GameObject:
   - component: {fileID: 6138278186810009468}
   - component: {fileID: 2876612676133189545}
   - component: {fileID: 4305830386250489202}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

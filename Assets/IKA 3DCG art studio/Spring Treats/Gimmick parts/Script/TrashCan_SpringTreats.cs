@@ -1,4 +1,4 @@
-﻿
+
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -7,7 +7,7 @@ using VRC.Udon;
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class TrashCan_SpringTreats : UdonSharpBehaviour
 {
-    void OnTriggerEnter(Collider coll)
+    void OnTriggerStay(Collider coll)
     {
         SakuraParfait_PickupMain sppm = coll.GetComponent<SakuraParfait_PickupMain>();
         if (sppm != null)
@@ -44,6 +44,5 @@ public class TrashCan_SpringTreats : UdonSharpBehaviour
         {
             ika3dsg3pm.Reset();
         }
-
     }
 }

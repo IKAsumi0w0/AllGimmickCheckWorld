@@ -4,6 +4,7 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
+[UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class WateringCanMain : UdonSharpBehaviour
 {
     [SerializeField] GameObject _psObj;
@@ -21,14 +22,9 @@ public class WateringCanMain : UdonSharpBehaviour
         }
     }
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
-        if (Networking.LocalPlayer.IsOwner(this.gameObject))
+        if (Networking.LocalPlayer.IsOwner(gameObject))
         {
             Vector3 forwardDirection = transform.right;
             Vector3 downDirection = Vector3.down;
@@ -52,9 +48,8 @@ public class WateringCanMain : UdonSharpBehaviour
         }
     }
 
-    public override void OnPickup()
+    public void MainPickup()
     {
-        Networking.SetOwner(Networking.LocalPlayer, gameObject);
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
     }
-
 }

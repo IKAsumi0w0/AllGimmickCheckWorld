@@ -18,26 +18,15 @@ public class CRTTV_Gimmick : UdonSharpBehaviour
         set
         {
             _flg = value;
-            _offObj.SetActive(!_flg);
-            _onObj.SetActive(_flg);
-            _onScreenObj.SetActive(_flg);
+            _offObj.SetActive(!value);
+            _onObj.SetActive(value);
+            _onScreenObj.SetActive(value);
         }
     }
 
     public override void Interact()
     {
-        if (Networking.LocalPlayer.IsOwner(this.gameObject))
-        {
-            ShowSwitch();
-        }
-        else
-        {
-            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(ShowSwitch));
-        }
-    }
-
-    public void ShowSwitch()
-    {
+        if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
         ModelSwitch = !ModelSwitch;
         RequestSerialization();
     }

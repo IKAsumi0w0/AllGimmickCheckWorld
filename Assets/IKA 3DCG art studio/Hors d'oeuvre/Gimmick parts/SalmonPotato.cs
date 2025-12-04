@@ -1,5 +1,6 @@
-﻿using UdonSharp;
+using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -36,12 +37,6 @@ public class SalmonPotato : UdonSharpBehaviour
         _animator.SetTrigger("Initialize");
     }
 
-    public void ResetPosition()
-    {
-        this.gameObject.transform.position = Vector3.zero;
-        _flg = false;
-    }
-
     public void ReSpawn()
     {
         SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "ReSpawnMethod");
@@ -49,6 +44,8 @@ public class SalmonPotato : UdonSharpBehaviour
 
     public void ReSpawnMethod()
     {
+        VRCPickup pickup1 = (VRCPickup)gameObject.GetComponent(typeof(VRCPickup));
+        if (pickup1 != null) pickup1.Drop();
         _animator.SetTrigger("ReSpawn");
         this.gameObject.transform.localPosition = Vector3.zero;
         this.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);

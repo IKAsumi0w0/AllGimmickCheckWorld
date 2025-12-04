@@ -9,7 +9,7 @@ public class hot_watertap_BK : UdonSharpBehaviour
 {
     [SerializeField] Animator _anime;
     // 任意フレームごとに処理
-    [SerializeField] int _updateInterval = 5;
+    [SerializeField] int _updateInterval = 3;
     // たまに1フレーム増やす確率（0〜1）
     [SerializeField] float _jitterChance = 0.1f;
     int _frameCounter;
